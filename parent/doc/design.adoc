@@ -1,0 +1,16 @@
+= README Parent
+
+[plantuml]
+----
+@startuml
+package Parent
+
+package Gateway
+
+package Launcher
+
+
+Gateway --|> Launcher
+
+@enduml
+----
