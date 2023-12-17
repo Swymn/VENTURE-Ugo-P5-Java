@@ -13,4 +13,18 @@
 
     <name>SafetyNet - Persona</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>fr.swynn</groupId>
+            <artifactId>database</artifactId>
+            <version>${database.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
