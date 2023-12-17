@@ -1,5 +1,6 @@
 = README Parent
 
+== Design
 [plantuml]
 ----
 @startuml
@@ -14,3 +15,9 @@ Gateway --|> Launcher
 
 @enduml
 ----
+
+*_Gateway_*: The gateway is the entry point for HTTP requests. It is responsible for parsing the request and passing it to the appropriate handler. It also handles the response from the handler and returns it to the client.
+
+*_Launcher_*: The launcher is responsible for the initialization of the application.
+
+*_Parent_*: The parent package contains only the global maven properties file. It will be here that we will build the application.
