@@ -1,0 +1,50 @@
+= Launcher =
+
+== Description ==
+
+The launcher is the main package that is used to launch the application. It is responsible for loading and connecting all the other packages together thanks to the Java Service Loader, and mapping them. It also contains the data source of the application.
+
+== Explanation ==
+
+=== Behavior
+
+Here is a sequence diagram of the behavior of the Launcher:
+
+[plantuml]
+----
+@startuml
+autonumber
+
+actor User
+entity Gateway
+Boundary Launcher
+entity Persona
+
+== Initialization ==
+Launcher -> Launcher : Start the application
+
+== Processing a request ==
+User -> Gateway : Make a request
+
+activate Gateway
+Gateway -> Launcher : Processing the request, and calling the right service, mapping the data
+deactivate Gateway
+
+activate Launcher
+Launcher -> Persona : Manipulating data and returning it to the Gateway
+deactivate Launcher
+
+activate Persona
+Persona -> Launcher : Mapping back the data
+deactivate Persona
+
+activate Launcher
+Launcher -> Gateway : Returning the data to the Gateway
+deactivate Launcher
+
+activate Gateway
+Gateway -> User : Returning the data to the User
+deactivate Gateway
+
+@enduml
+----

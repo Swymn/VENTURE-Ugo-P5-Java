@@ -5,13 +5,15 @@
 ----
 @startuml
 package Parent
-
 package Gateway
-
 package Launcher
+package Persona
+package Database
 
 
-Gateway --|> Launcher
+Launcher --|> Gateway
+Launcher --|> Persona
+Persona --|> Database
 
 @enduml
 ----
@@ -21,3 +23,7 @@ Gateway --|> Launcher
 *_Launcher_*: The launcher is responsible for the initialization of the application.
 
 *_Parent_*: The parent package contains only the global maven properties file. It will be here that we will build the application.
+
+*_Persona_*: The persona package contains all the service for people. It is responsible for the creation, modification and deletion of people.
+
+*_Database_*: The database package contains all the data retrieval and persistence services.

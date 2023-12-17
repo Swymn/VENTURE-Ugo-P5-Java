@@ -1,0 +1,5 @@
+= Gateway =
+
+== Explanation ==
+
+In our Spring Boot application, the Gateway module serves as the central point for handling all incoming requests and routing them to the appropriate controllers.
