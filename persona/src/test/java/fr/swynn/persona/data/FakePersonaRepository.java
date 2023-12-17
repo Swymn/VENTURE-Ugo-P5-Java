@@ -1,4 +1,4 @@
-package fr.swynn.persona.impl;
+package fr.swynn.persona.data;
 
 import fr.swynn.persona.data.PersonaRepository;
 import fr.swynn.persona.model.Persona;

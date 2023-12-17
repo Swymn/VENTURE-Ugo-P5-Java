@@ -1,6 +1,8 @@
-package fr.swynn.persona.impl;
+package fr.swynn.persona.data;
 
 import fr.swynn.persona.data.PersonaService;
+import fr.swynn.persona.impl.SNPersonaService;
+import fr.swynn.persona.impl.UnknownPerson;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

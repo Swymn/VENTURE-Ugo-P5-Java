@@ -17,6 +17,7 @@
         <gateway.version>1.0-SNAPSHOT</gateway.version>
         <launcher.version>1.0-SNAPSHOT</launcher.version>
         <persona.version>1.0-SNAPSHOT</persona.version>
+        <database.version>1.0-SNAPSHOT</database.version>
 
         <springboot.version>3.2.0</springboot.version>
     </properties>
@@ -35,6 +36,13 @@
             <artifactId>logback-classic</artifactId>
             <version>1.4.11</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

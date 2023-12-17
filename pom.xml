@@ -17,6 +17,7 @@
         <module>launcher</module>
 
         <module>gateway</module>
+        <module>database</module>
 
         <module>persona</module>
     </modules>
