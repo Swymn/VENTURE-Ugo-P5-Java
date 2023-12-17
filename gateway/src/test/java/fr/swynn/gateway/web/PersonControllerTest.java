@@ -27,7 +27,19 @@ class PersonControllerTest {
         // WHEN a person is requested
         final var person = controller.getPerson(firstName, lastName);
         // THEN the person is returned
+        Assertions.assertNotNull(person);
         Assertions.assertEquals(firstName, person.firstName());
         Assertions.assertEquals(lastName, person.lastName());
+    }
+
+    @Test
+    void getPerson_unknownPerson_exception() {
+        // GIVEN a person controller
+        final var firstName = "John";
+        final var lastName = "Boyd";
+        // WHEN an unknown person is requested
+        final var person = controller.getPerson(firstName, lastName);
+        // THEN the controller should return null.
+        Assertions.assertNull(person);
     }
 }
