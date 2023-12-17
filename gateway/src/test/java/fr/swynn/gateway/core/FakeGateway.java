@@ -2,11 +2,11 @@ package fr.swynn.gateway.core;
 
 import java.util.List;
 
-public class FakeSafetyNetGateway implements Gateway {
+public class FakeGateway implements Gateway {
 
     private final List<GatewayPerson> persons;
 
-    public FakeSafetyNetGateway() {
+    public FakeGateway() {
         persons = getPersons();
     }
 

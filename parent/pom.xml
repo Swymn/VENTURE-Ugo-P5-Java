@@ -16,6 +16,7 @@
 
         <gateway.version>1.0-SNAPSHOT</gateway.version>
         <launcher.version>1.0-SNAPSHOT</launcher.version>
+        <persona.version>1.0-SNAPSHOT</persona.version>
 
         <springboot.version>3.2.0</springboot.version>
     </properties>

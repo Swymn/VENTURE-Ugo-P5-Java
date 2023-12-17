@@ -30,6 +30,11 @@
             <artifactId>gateway</artifactId>
             <version>${gateway.version}</version>
         </dependency>
+        <dependency>
+            <groupId>fr.swynn</groupId>
+            <artifactId>persona</artifactId>
+            <version>${persona.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
