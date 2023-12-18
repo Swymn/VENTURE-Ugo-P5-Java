@@ -4,4 +4,7 @@ public interface Gateway {
 
     GatewayPerson getPerson(String firstName, String lastName) throws GatewayUnknownPerson;
 
+    GatewayPerson updatePerson(GatewayPerson person) throws GatewayUnknownPerson;
+
+    GatewayPerson createPerson(GatewayPerson person) throws GatewayPersonAlreadyExist;
 }

@@ -47,7 +47,7 @@ public class SNPersonaService implements PersonaService {
     }
 
     @Override
-    public Persona createPersona(Persona persona) throws PersonAlreadyExist {
+    public Persona createPersona(final Persona persona) throws PersonAlreadyExist {
         for (final var personaInList : personas) {
             if (personaInList.firstName().equals(persona.firstName()) && personaInList.lastName().equals(persona.lastName())) {
                 throw new PersonAlreadyExist(persona.firstName(), persona.lastName());

@@ -2,16 +2,16 @@ package fr.swynn.gateway.core;
 
 import java.io.Serial;
 
-public class GatewayUnknownPerson extends Exception {
+public class GatewayPersonAlreadyExist extends Exception {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final String firstName;
-    private final String lastName;
+    public final String firstName;
+    public final String lastName;
 
-    public GatewayUnknownPerson(final String firstName, final String lastName) {
-        super("Unknown person: " + firstName + " " + lastName);
+    public GatewayPersonAlreadyExist(final String firstName, final String lastName) {
+        super("Person already exist: " + firstName + " " + lastName);
         this.firstName = firstName;
         this.lastName = lastName;
     }

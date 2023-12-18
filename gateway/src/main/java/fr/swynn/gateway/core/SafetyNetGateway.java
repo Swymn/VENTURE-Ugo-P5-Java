@@ -28,6 +28,16 @@ public class SafetyNetGateway implements Gateway {
 
     @Override
     public GatewayPerson getPerson(String firstName, String lastName) throws GatewayUnknownPerson {
-        return personProxy.getPersona(firstName, lastName);
+        return personProxy.getPerson(firstName, lastName);
+    }
+
+    @Override
+    public GatewayPerson updatePerson(GatewayPerson person) throws GatewayUnknownPerson {
+        return personProxy.updatePerson(person);
+    }
+
+    @Override
+    public GatewayPerson createPerson(GatewayPerson person) throws GatewayPersonAlreadyExist {
+        return personProxy.createPerson(person);
     }
 }
