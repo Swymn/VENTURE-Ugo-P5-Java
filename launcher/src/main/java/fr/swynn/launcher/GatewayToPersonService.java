@@ -1,6 +1,6 @@
 package fr.swynn.launcher;
 
-import fr.swynn.gateway.core.GatewayPerson;
+import fr.swynn.gateway.core.GatewayPersona;
 import fr.swynn.gateway.core.GatewayPersonAlreadyExist;
 import fr.swynn.gateway.core.GatewayUnknownPerson;
 import fr.swynn.gateway.core.PersonServiceProxy;
@@ -27,17 +27,18 @@ public class GatewayToPersonService implements PersonServiceProxy {
     }
 
     @Override
-    public GatewayPerson getPerson(final String firstName, final String lastName) throws GatewayUnknownPerson {
+    public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         try {
-            final var person = personaService.getPersona(firstName, lastName);
-            return mapper.map(person);
+            final var persona = mapper.map(person);
+            final var deletedPersona = personaService.deletePersona(persona);
+            return mapper.map(deletedPersona);
         } catch (final UnknownPerson ex) {
             throw new GatewayUnknownPerson(ex.getFirstName(), ex.getLastName());
         }
     }
 
     @Override
-    public GatewayPerson updatePerson(final GatewayPerson person) throws GatewayUnknownPerson {
+    public GatewayPersona updatePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         try {
             final var persona = mapper.map(person);
             final var updatedPerson = personaService.updatePersona(persona);
@@ -48,7 +49,7 @@ public class GatewayToPersonService implements PersonServiceProxy {
     }
 
     @Override
-    public GatewayPerson createPerson(final GatewayPerson person) throws GatewayPersonAlreadyExist {
+    public GatewayPersona createPerson(final GatewayPersona person) throws GatewayPersonAlreadyExist {
         try {
             final var persona = mapper.map(person);
             final var createdPerson = personaService.createPersona(persona);

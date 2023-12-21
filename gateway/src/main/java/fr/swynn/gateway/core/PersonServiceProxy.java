@@ -1,9 +1,9 @@
 package fr.swynn.gateway.core;
 
 public interface PersonServiceProxy {
-    GatewayPerson getPerson(String firstName, String lastName) throws GatewayUnknownPerson;
+    GatewayPersona deletePerson(GatewayPersona person) throws GatewayUnknownPerson;
 
-    GatewayPerson updatePerson(GatewayPerson person) throws GatewayUnknownPerson;
+    GatewayPersona updatePerson(GatewayPersona person) throws GatewayUnknownPerson;
 
-    GatewayPerson createPerson(GatewayPerson person) throws GatewayPersonAlreadyExist;
+    GatewayPersona createPerson(GatewayPersona person) throws GatewayPersonAlreadyExist;
 }

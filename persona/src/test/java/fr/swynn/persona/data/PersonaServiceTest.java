@@ -19,26 +19,22 @@ class PersonaServiceTest {
     }
 
     @Test
-    void getPersona_returnPersona_existingPersona() throws UnknownPerson {
+    void deletePersona_returnPersona_existingPersona() throws UnknownPerson {
         // GIVEN a persona service
-        final var firstName = "John";
-        final var lastName = "Doe";
+        final var persona = new Persona("John", "Doe", "1509 Baylee St", "NYC", "28015", "148-478-2156", "john.doe@mail.com");
         // WHEN we get a persona
-        final var persona = personaService.getPersona(firstName, lastName);
+        final var deletedPersona = personaService.deletePersona(persona);
         // THEN the persona is returned
-        Assertions.assertNotNull(persona);
-        Assertions.assertEquals(firstName, persona.firstName());
-        Assertions.assertEquals(lastName, persona.lastName());
+        Assertions.assertNotNull(deletedPersona);
     }
 
     @Test
-    void getPersona_throwUnknownPerson_nonExistingPersona() {
+    void deletePersona_throwUnknownPerson_nonExistingPersona() {
         // GIVEN a persona service
-        final var firstName = "John";
-        final var lastName = "Boyd";
+        final var persona = new Persona("John", "Boyd", "1509 Baylee St", "NYC", "28015", "148-478-2156", "john.boyd@mail.com");
         // WHEN we get a persona
         // THEN an exception is thrown
-        Assertions.assertThrows(UnknownPerson.class, () -> personaService.getPersona(firstName, lastName));
+        Assertions.assertThrows(UnknownPerson.class, () -> personaService.deletePersona(persona));
     }
 
     @Test

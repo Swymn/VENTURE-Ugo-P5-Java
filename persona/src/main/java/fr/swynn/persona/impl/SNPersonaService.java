@@ -25,20 +25,22 @@ public class SNPersonaService implements PersonaService {
     }
 
     @Override
-    public Persona getPersona(final String firstName, final String lastName) throws UnknownPerson {
-        for (final var persona : personas) {
-            if (persona.firstName().equals(firstName) && persona.lastName().equals(lastName)) {
+    public Persona deletePersona(final Persona persona) throws UnknownPerson {
+        for (int i = 0; i < personas.size(); i++) {
+            final var personaInList = personas.get(i);
+            if (persona.equals(personaInList)) {
+                personas.remove(i);
                 return persona;
             }
         }
-        throw new UnknownPerson(firstName, lastName);
+        throw new UnknownPerson(persona.firstName(), persona.lastName());
     }
 
     @Override
     public Persona updatePersona(final Persona persona) throws UnknownPerson {
         for (int i = 0; i < personas.size(); i++) {
             final var personaInList = personas.get(i);
-            if (personaInList.firstName().equals(persona.firstName()) && personaInList.lastName().equals(persona.lastName())) {
+            if (persona.equals(personaInList)) {
                 personas.set(i, persona);
                 return persona;
             }
@@ -49,11 +51,10 @@ public class SNPersonaService implements PersonaService {
     @Override
     public Persona createPersona(final Persona persona) throws PersonAlreadyExist {
         for (final var personaInList : personas) {
-            if (personaInList.firstName().equals(persona.firstName()) && personaInList.lastName().equals(persona.lastName())) {
+            if (persona.equals(personaInList)) {
                 throw new PersonAlreadyExist(persona.firstName(), persona.lastName());
             }
         }
-
         personas.add(persona);
         return persona;
     }

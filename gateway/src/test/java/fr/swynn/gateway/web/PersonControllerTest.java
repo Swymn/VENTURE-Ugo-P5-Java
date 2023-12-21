@@ -1,7 +1,6 @@
 package fr.swynn.gateway.web;
 
-import fr.swynn.gateway.core.GatewayPerson;
-import fr.swynn.gateway.core.GatewayUnknownPerson;
+import fr.swynn.gateway.core.GatewayPersona;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,31 +22,27 @@ class PersonControllerTest {
     }
 
     @Test
-    void getPerson_newPerson_defaultState() {
+    void deletePerson_successfullyDeleted_defaultState() {
         // GIVEN a person controller
-        final var firstName = "John";
-        final var lastName = "Doe";
+        final var person = new GatewayPersona("John", "Doe", "1234 Main St", "Springfield", "12345", "123-456-7890", "john.doe@mail.com");
         // WHEN a person is requested
-        final var response = controller.getPerson(firstName, lastName);
+        final var response = controller.deletePerson(person);
 
         // THEN the response is OK
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         // AND the person is returned
-        final var person = response.getBody();
+        final var deletedPerson = response.getBody();
 
-        Assertions.assertNotNull(person);
-        Assertions.assertEquals(firstName, person.firstName());
-        Assertions.assertEquals(lastName, person.lastName());
+        Assertions.assertNotNull(deletedPerson);
     }
 
     @Test
-    void getPerson_unknownPerson_exception() {
+    void deletedPerson_unknownPerson_exception() {
         // GIVEN a person controller
-        final var firstName = "John";
-        final var lastName = "Boyd";
+        final var person = new GatewayPersona("John", "Boyd", "1234 Main St", "Springfield", "12345", "123-456-7890", "john.boyd@mail.com");
         // WHEN an unknown person is requested
-        final var response = controller.getPerson(firstName, lastName);
+        final var response = controller.deletePerson(person);
         // THEN the controller should return not found code.
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
@@ -108,12 +103,12 @@ class PersonControllerTest {
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
 
-    private GatewayPerson createGatewayPerson(final String firstName, final String lastName) {
+    private GatewayPersona createGatewayPerson(final String firstName, final String lastName) {
         final var address = "1234 Main St";
         final var city = "Springfield";
         final var zip = "12345";
         final var phone = "123-456-7890";
         final var email = firstName + "." + lastName + "@mail.com";
-        return new GatewayPerson(firstName, lastName, address, city, zip, phone, email);
+        return new GatewayPersona(firstName, lastName, address, city, zip, phone, email);
     }
 }

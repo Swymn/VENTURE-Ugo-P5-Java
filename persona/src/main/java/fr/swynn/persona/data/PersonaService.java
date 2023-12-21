@@ -6,7 +6,7 @@ import fr.swynn.persona.model.Persona;
 
 public interface PersonaService {
 
-    Persona getPersona(String firstName, String lastName) throws UnknownPerson;
+    Persona deletePersona(Persona persona) throws UnknownPerson;
 
     Persona updatePersona(Persona persona) throws UnknownPerson;
 

@@ -11,6 +11,7 @@ public class SafetyNetGateway implements Gateway {
     private static final String GATEWAY_LOADED_WITH_PROXY = "Gateway loaded with proxy: {}";
 
     private PersonServiceProxy personProxy;
+    private FirestationServiceProxy firestationProxy;
 
     static {
         LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
@@ -18,6 +19,7 @@ public class SafetyNetGateway implements Gateway {
 
     public SafetyNetGateway() {
         loadPersonProxy();
+        loadFirestationProxy();
     }
 
     private void loadPersonProxy() {
@@ -26,18 +28,29 @@ public class SafetyNetGateway implements Gateway {
         LOGGER.info(GATEWAY_LOADED_WITH_PROXY, personProxy.getClass().getName());
     }
 
-    @Override
-    public GatewayPerson getPerson(String firstName, String lastName) throws GatewayUnknownPerson {
-        return personProxy.getPerson(firstName, lastName);
+    private void loadFirestationProxy() {
+        final var proxy = ServiceLoader.load(FirestationServiceProxy.class);
+        firestationProxy = proxy.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, firestationProxy.getClass().getName());
     }
 
     @Override
-    public GatewayPerson updatePerson(GatewayPerson person) throws GatewayUnknownPerson {
+    public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
+        return personProxy.deletePerson(person);
+    }
+
+    @Override
+    public GatewayPersona updatePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         return personProxy.updatePerson(person);
     }
 
     @Override
-    public GatewayPerson createPerson(GatewayPerson person) throws GatewayPersonAlreadyExist {
+    public GatewayPersona createPerson(final GatewayPersona person) throws GatewayPersonAlreadyExist {
         return personProxy.createPerson(person);
+    }
+
+    @Override
+    public GatewayFirestation createFirestation(final GatewayFirestation firestation) throws GatewayFirestationAlreadyExist {
+        return firestationProxy.createFirestation(firestation);
     }
 }

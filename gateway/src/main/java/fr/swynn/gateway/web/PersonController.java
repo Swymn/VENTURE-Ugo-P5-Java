@@ -1,16 +1,11 @@
 package fr.swynn.gateway.web;
 
-import fr.swynn.gateway.core.Gateway;
-import fr.swynn.gateway.core.GatewayPerson;
-import fr.swynn.gateway.core.GatewayPersonAlreadyExist;
-import fr.swynn.gateway.core.GatewayUnknownPerson;
+import fr.swynn.gateway.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ServiceLoader;
 
 @RestController
 public class PersonController {
@@ -26,15 +21,14 @@ public class PersonController {
     }
 
     private void loadGateway() {
-        final var loadedGateway = ServiceLoader.load(Gateway.class);
-        gateway = loadedGateway.findFirst().orElseThrow();
+        gateway = new SafetyNetGateway();
     }
 
-    @GetMapping("/person")
-    public ResponseEntity<GatewayPerson> getPerson(@RequestParam("firstName") final String firstName, @RequestParam("lastName") final String lastName) {
+    @DeleteMapping("/person")
+    public ResponseEntity<GatewayPersona> deletePerson(@RequestBody final GatewayPersona person) {
         try {
-            final var person = gateway.getPerson(firstName, lastName);
-            return new ResponseEntity<>(person, HttpStatus.OK);
+            final var deletedPerson = gateway.deletePerson(person);
+            return new ResponseEntity<>(deletedPerson, HttpStatus.OK);
         } catch (final GatewayUnknownPerson ex) {
             LOGGER.error(PERSON_NOT_FOUND, ex.getFirstName(), ex.getLastName());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -42,7 +36,7 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public ResponseEntity<GatewayPerson> updatePerson(@RequestBody final GatewayPerson person) {
+    public ResponseEntity<GatewayPersona> updatePerson(@RequestBody final GatewayPersona person) {
         try {
             final var updatedPerson = gateway.updatePerson(person);
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
@@ -53,7 +47,7 @@ public class PersonController {
     }
 
     @PostMapping("/person")
-    public ResponseEntity<GatewayPerson> createPerson(@RequestBody final GatewayPerson person) {
+    public ResponseEntity<GatewayPersona> createPerson(@RequestBody final GatewayPersona person) {
         try {
             final var createdPerson = gateway.createPerson(person);
             return new ResponseEntity<>(createdPerson, HttpStatus.CREATED);
