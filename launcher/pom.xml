@@ -40,6 +40,12 @@
             <artifactId>firestation</artifactId>
             <version>${inferno.version}</version>
         </dependency>
+        <dependency>
+            <groupId>fr.swynn</groupId>
+            <artifactId>medical</artifactId>
+            <version>${medical.version}</version>
+        </dependency>
+
 
     </dependencies>
 

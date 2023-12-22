@@ -21,6 +21,7 @@
 
         <module>persona</module>
         <module>firestation</module>
+        <module>medical</module>
     </modules>
 
 </project>
