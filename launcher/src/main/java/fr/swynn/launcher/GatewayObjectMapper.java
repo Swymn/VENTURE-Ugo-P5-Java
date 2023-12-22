@@ -2,7 +2,9 @@ package fr.swynn.launcher;
 
 import fr.swynn.firestation.model.Firestation;
 import fr.swynn.gateway.core.GatewayFirestation;
+import fr.swynn.gateway.core.GatewayMedicalRecord;
 import fr.swynn.gateway.core.GatewayPersona;
+import fr.swynn.medical.model.MedicalRecord;
 import fr.swynn.persona.model.Persona;
 
 public class GatewayObjectMapper {
@@ -21,5 +23,13 @@ public class GatewayObjectMapper {
 
     public Firestation map(final GatewayFirestation firestation) {
         return new Firestation(firestation.address(), firestation.station());
+    }
+
+    public GatewayMedicalRecord map(final MedicalRecord medicalRecord) {
+        return new GatewayMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.birthdate(), medicalRecord.medications(), medicalRecord.allergies());
+    }
+
+    public MedicalRecord map(final GatewayMedicalRecord medicalRecord) {
+        return new MedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.birthdate(), medicalRecord.medications(), medicalRecord.allergies());
     }
 }

@@ -12,6 +12,7 @@ public class SafetyNetGateway implements Gateway {
 
     private PersonServiceProxy personProxy;
     private FirestationServiceProxy firestationProxy;
+    private MedicalServiceProxy medicalProxy;
 
     static {
         LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
@@ -20,6 +21,7 @@ public class SafetyNetGateway implements Gateway {
     public SafetyNetGateway() {
         loadPersonProxy();
         loadFirestationProxy();
+        loadMedicalProxy();
     }
 
     private void loadPersonProxy() {
@@ -32,6 +34,12 @@ public class SafetyNetGateway implements Gateway {
         final var proxy = ServiceLoader.load(FirestationServiceProxy.class);
         firestationProxy = proxy.findFirst().orElseThrow();
         LOGGER.info(GATEWAY_LOADED_WITH_PROXY, firestationProxy.getClass().getName());
+    }
+
+    private void loadMedicalProxy() {
+        final var proxy = ServiceLoader.load(MedicalServiceProxy.class);
+        medicalProxy = proxy.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, medicalProxy.getClass().getName());
     }
 
     @Override
@@ -62,5 +70,20 @@ public class SafetyNetGateway implements Gateway {
     @Override
     public GatewayFirestation deleteFirestation(final GatewayFirestation firestation) throws GatewayUnknownFirestation {
         return firestationProxy.deleteFirestation(firestation);
+    }
+
+    @Override
+    public GatewayMedicalRecord createMedicalRecord(final GatewayMedicalRecord medicalRecord) throws GatewayMedicalRecordAlreadyExist {
+        return medicalProxy.createMedicalRecord(medicalRecord);
+    }
+
+    @Override
+    public GatewayMedicalRecord updateMedicalRecord(final GatewayMedicalRecord medicalRecord) throws GatewayUnknownMedicalRecord {
+        return medicalProxy.updateMedicalRecord(medicalRecord);
+    }
+
+    @Override
+    public GatewayMedicalRecord deleteMedicalRecord(final GatewayMedicalRecord medicalRecord) throws GatewayUnknownMedicalRecord {
+        return medicalProxy.deleteMedicalRecord(medicalRecord);
     }
 }

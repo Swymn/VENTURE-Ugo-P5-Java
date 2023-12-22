@@ -4,8 +4,12 @@ import fr.swynn.gateway.core.GatewayFirestation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+@SpringBootApplication
+@SpringBootTest(classes = FirestationController.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class FirestationControllerTest {
 
     private FirestationController controller;
