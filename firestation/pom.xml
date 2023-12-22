@@ -11,7 +11,7 @@
     <artifactId>firestation</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>SafetyNet - Inferno</name>
+    <name>SafetyNet - Firestation</name>
 
     <dependencies>
         <dependency>
