@@ -24,7 +24,8 @@ public class GatewayToPersonService implements PersonServiceProxy {
     }
 
     private void loadPersonaService() {
-        personaService = SafetyNetApplication.getPersonaService();
+        final var service = ServiceLoader.load(PersonaService.class);
+        personaService = service.findFirst().orElseThrow();
     }
 
     @Override

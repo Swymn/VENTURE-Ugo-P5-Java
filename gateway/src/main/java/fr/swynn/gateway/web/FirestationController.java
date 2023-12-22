@@ -18,8 +18,9 @@ public class FirestationController {
     }
 
     private void loadGateway() {
-        final var loadedGateway = ServiceLoader.load(Gateway.class);
-        gateway = loadedGateway.findFirst().orElseThrow();
+        final var gatewayLoader = ServiceLoader.load(GatewayProxy.class);
+        final var gatewayProxy = gatewayLoader.findFirst().orElseThrow();
+        gateway = gatewayProxy.getGateway();
     }
 
     @GetMapping("/firestation")

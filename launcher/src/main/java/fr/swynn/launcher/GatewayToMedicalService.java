@@ -7,6 +7,7 @@ import fr.swynn.gateway.core.MedicalServiceProxy;
 import fr.swynn.medical.data.MedicalService;
 import fr.swynn.medical.impl.MedicalRecordAlreadyExist;
 import fr.swynn.medical.impl.UnknownMedicalRecord;
+import fr.swynn.persona.data.PersonaService;
 
 import java.util.ServiceLoader;
 
@@ -20,7 +21,8 @@ public class GatewayToMedicalService implements MedicalServiceProxy {
     }
 
     private void loadMedicalService() {
-        service = SafetyNetApplication.getMedicalService();
+        final var loadedService = ServiceLoader.load(MedicalService.class);
+        service = loadedService.findFirst().orElseThrow();
     }
 
     @Override

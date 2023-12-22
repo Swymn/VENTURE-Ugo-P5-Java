@@ -8,16 +8,11 @@ import org.junit.jupiter.api.Test;
 
 class GatewayToPersonServiceTest {
 
-    private Gateway center;
+    private GatewayToPersonService service;
 
     @BeforeEach
     void setUp() {
-        center = ConfiguredGatewayProxy.gateway();
-    }
-
-    @AfterEach
-    void tearDown() {
-        ConfiguredGatewayProxy.resetSingleton();
+        service = new GatewayToPersonService();
     }
 
     @Test
@@ -26,7 +21,7 @@ class GatewayToPersonServiceTest {
         // AND a persona
         final var persona = new GatewayPersona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com");
         // WHEN deleting the persona
-        final var deletedPersona = center.deletePerson(persona);
+        final var deletedPersona = service.deletePerson(persona);
         // THEN the deleted persona shouldn't be null
         Assertions.assertNotNull(deletedPersona);
     }
@@ -38,7 +33,7 @@ class GatewayToPersonServiceTest {
         final var persona = new GatewayPersona("John", "Boyd", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.boyd@mail.com");
         // WHEN deleting the persona
         // THEN the persona service should throw an exception
-        Assertions.assertThrows(GatewayUnknownPerson.class, () -> center.deletePerson(persona));
+        Assertions.assertThrows(GatewayUnknownPerson.class, () -> service.deletePerson(persona));
     }
 
     @Test
@@ -47,7 +42,7 @@ class GatewayToPersonServiceTest {
         // AND a persona
         final var persona = new GatewayPersona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com");
         // WHEN updating the persona
-        final var updatedPersona = center.updatePerson(persona);
+        final var updatedPersona = service.updatePerson(persona);
         // THEN the updated persona shouldn't be null
         Assertions.assertNotNull(updatedPersona);
     }
@@ -59,7 +54,7 @@ class GatewayToPersonServiceTest {
         final var persona = new GatewayPersona("John", "Boyd", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.boyd@mail.com");
         // WHEN updating the persona
         // THEN the persona service should throw an exception
-        Assertions.assertThrows(GatewayUnknownPerson.class, () -> center.updatePerson(persona));
+        Assertions.assertThrows(GatewayUnknownPerson.class, () -> service.updatePerson(persona));
     }
 
     @Test
@@ -68,7 +63,7 @@ class GatewayToPersonServiceTest {
         // AND a persona
         final var persona = new GatewayPersona("John", "Boyd", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.body@mail.com");
         // WHEN creating the persona
-        final var createdPersona = center.createPerson(persona);
+        final var createdPersona = service.createPerson(persona);
         // THEN the created persona shouldn't be null
         Assertions.assertNotNull(createdPersona);
     }
@@ -80,7 +75,7 @@ class GatewayToPersonServiceTest {
         final var persona = new GatewayPersona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com");
         // WHEN creating the persona
         // THEN the persona service should throw an exception
-        Assertions.assertThrows(GatewayPersonAlreadyExist.class, () -> center.createPerson(persona));
+        Assertions.assertThrows(GatewayPersonAlreadyExist.class, () -> service.createPerson(persona));
     }
 
     @Test
@@ -88,7 +83,7 @@ class GatewayToPersonServiceTest {
         // GIVEN a persona service
         final var address = "1509 Culver St";
         // WHEN getting the personas by address
-        final var personas = center.getPersonByAddress(address);
+        final var personas = service.getPersonByAddress(address);
         // THEN the personas shouldn't be null
         Assertions.assertNotNull(personas);
         Assertions.assertEquals(2, personas.size());

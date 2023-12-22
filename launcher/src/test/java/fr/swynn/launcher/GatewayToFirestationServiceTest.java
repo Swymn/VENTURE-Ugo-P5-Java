@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 
 class GatewayToFirestationServiceTest {
 
-    private Gateway center;
+    private GatewayToFirestationService service;
 
     @BeforeEach
     void setUp() {
-        center = ConfiguredGatewayProxy.gateway();
+        service = new GatewayToFirestationService();
     }
 
     @Test
@@ -19,7 +19,7 @@ class GatewayToFirestationServiceTest {
         // GIVEN a firestation service
         final var station = "2";
         // WHEN getting the firestation addresses
-        final var addresses = center.getFirestationAddressByStationNumber(station);
+        final var addresses = service.getFirestationAddressByStationNumber(station);
         // THEN the addresses shouldn't be null
         Assertions.assertNotNull(addresses);
         Assertions.assertEquals(3, addresses.size());
@@ -31,7 +31,7 @@ class GatewayToFirestationServiceTest {
         final var station = "4";
         // WHEN getting the firestation addresses
         // THEN the firestation service should throw an exception
-        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> center.getFirestationAddressByStationNumber(station));
+        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> service.getFirestationAddressByStationNumber(station));
     }
 
     @Test
@@ -40,7 +40,7 @@ class GatewayToFirestationServiceTest {
         // AND a station
         final var firestation = new GatewayFirestation("1509 Baylee St", "3");
         // WHEN creating the firestation
-        final var createdFirestation = center.createFirestation(firestation);
+        final var createdFirestation = service.createFirestation(firestation);
         // THEN the created firestation shouldn't be null
         Assertions.assertNotNull(createdFirestation);
     }
@@ -52,7 +52,7 @@ class GatewayToFirestationServiceTest {
         final var firestation = new GatewayFirestation("1 rue de la paix", "1");
         // WHEN creating the firestation
         // THEN the firestation service should throw an exception
-        Assertions.assertThrows(GatewayFirestationAlreadyExist.class, () -> center.createFirestation(firestation));
+        Assertions.assertThrows(GatewayFirestationAlreadyExist.class, () -> service.createFirestation(firestation));
     }
 
     @Test
@@ -61,7 +61,7 @@ class GatewayToFirestationServiceTest {
         // AND a station
         final var firestation = new GatewayFirestation("1 rue de la paix", "1");
         // WHEN creating the firestation
-        final var createdFirestation = center.updateFirestation(firestation);
+        final var createdFirestation = service.updateFirestation(firestation);
         // THEN the created firestation shouldn't be null
         Assertions.assertNotNull(createdFirestation);
     }
@@ -73,7 +73,7 @@ class GatewayToFirestationServiceTest {
         final var firestation = new GatewayFirestation("1509 Baylee St", "3");
         // WHEN creating the firestation
         // THEN the firestation service should throw an exception
-        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> center.updateFirestation(firestation));
+        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> service.updateFirestation(firestation));
     }
 
     @Test
@@ -82,7 +82,7 @@ class GatewayToFirestationServiceTest {
         // AND a station
         final var firestation = new GatewayFirestation("1 rue de la paix", "1");
         // WHEN creating the firestation
-        final var createdFirestation = center.deleteFirestation(firestation);
+        final var createdFirestation = service.deleteFirestation(firestation);
         // THEN the created firestation shouldn't be null
         Assertions.assertNotNull(createdFirestation);
     }
@@ -94,6 +94,6 @@ class GatewayToFirestationServiceTest {
         final var firestation = new GatewayFirestation("1509 Baylee St", "3");
         // WHEN creating the firestation
         // THEN the firestation service should throw an exception
-        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> center.deleteFirestation(firestation));
+        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> service.deleteFirestation(firestation));
     }
 }

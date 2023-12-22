@@ -8,11 +8,29 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 public class SafetyNetGateway implements Gateway {
+
+    private static final Logger LOGGER;
+    private static final String GATEWAY_LOADED_WITH_PROXY = "Connection to Gateway loaded with {} proxy.";
+
+    private static Gateway instance;
+
     private PersonServiceProxy personProxy;
     private FirestationServiceProxy firestationProxy;
     private MedicalServiceProxy medicalProxy;
 
-    public SafetyNetGateway() {
+    static {
+        LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
+        instance = new SafetyNetGateway();
+    }
+
+    public static Gateway getInstance() {
+        if (instance == null) {
+            instance = new SafetyNetGateway();
+        }
+        return instance;
+    }
+
+    private SafetyNetGateway() {
         loadPersonProxy();
         loadFirestationProxy();
         loadMedicalProxy();
@@ -21,16 +39,19 @@ public class SafetyNetGateway implements Gateway {
     private void loadPersonProxy() {
         final var proxy = ServiceLoader.load(PersonServiceProxy.class);
         personProxy = proxy.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, "PersonService");
     }
 
     private void loadFirestationProxy() {
         final var proxy = ServiceLoader.load(FirestationServiceProxy.class);
         firestationProxy = proxy.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, "FirestationService");
     }
 
     private void loadMedicalProxy() {
         final var proxy = ServiceLoader.load(MedicalServiceProxy.class);
         medicalProxy = proxy.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, "MedicalService");
     }
 
     @Override

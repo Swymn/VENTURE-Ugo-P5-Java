@@ -22,7 +22,8 @@ public class GatewayToFirestationService implements FirestationServiceProxy {
     }
 
     private void loadFirestationService() {
-        service = SafetyNetApplication.getFirestationService();
+        final var loadedService = ServiceLoader.load(FirestationService.class);
+        service = loadedService.findFirst().orElseThrow();
     }
 
     @Override
