@@ -33,3 +33,6 @@ replay_pid*
 .idea
 *.iws
 *.ipr
+
+### VSCODE ###
+.vscode

@@ -1,20 +1,17 @@
 package fr.swynn.launcher;
 
-import fr.swynn.gateway.core.GatewayMedicalRecord;
-import fr.swynn.gateway.core.GatewayMedicalRecordAlreadyExist;
-import fr.swynn.gateway.core.GatewayUnknownMedicalRecord;
-import fr.swynn.gateway.core.MedicalServiceProxy;
+import fr.swynn.gateway.core.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GatewayToMedicalServiceTest {
 
-    private MedicalServiceProxy service;
+    private Gateway center;
 
     @BeforeEach
     void setUp() {
-        service = new GatewayToMedicalService();
+        center = ConfiguredGatewayProxy.gateway();
     }
 
     @Test
@@ -23,7 +20,7 @@ class GatewayToMedicalServiceTest {
         // AND a medical record that does not exist
         final var medicalRecord = new GatewayMedicalRecord("John", "Boyd", "01/01/2000", new String[0], new String[0]);
         // WHEN we create the medical record
-        final var createdMedicalRecord = service.createMedicalRecord(medicalRecord);
+        final var createdMedicalRecord = center.createMedicalRecord(medicalRecord);
         // THEN the created medical record shouldn't be null
         Assertions.assertNotNull(createdMedicalRecord);
     }
@@ -35,7 +32,7 @@ class GatewayToMedicalServiceTest {
         final var medicalRecord = new GatewayMedicalRecord("John", "Doe", "01/01/2000", new String[0], new String[0]);
         // WHEN we create the medical record
         // THEN the created medical record should throw an exception
-        Assertions.assertThrows(GatewayMedicalRecordAlreadyExist.class, () -> service.createMedicalRecord(medicalRecord));
+        Assertions.assertThrows(GatewayMedicalRecordAlreadyExist.class, () -> center.createMedicalRecord(medicalRecord));
     }
 
     @Test
@@ -44,7 +41,7 @@ class GatewayToMedicalServiceTest {
         // AND a medical record that exists
         final var medicalRecord = new GatewayMedicalRecord("John", "Doe", "01/01/2000", new String[0], new String[0]);
         // WHEN we update the medical record
-        final var updatedMedicalRecord = service.updateMedicalRecord(medicalRecord);
+        final var updatedMedicalRecord = center.updateMedicalRecord(medicalRecord);
         // THEN the updated medical record shouldn't be null
         Assertions.assertNotNull(updatedMedicalRecord);
     }
@@ -56,7 +53,7 @@ class GatewayToMedicalServiceTest {
         final var medicalRecord = new GatewayMedicalRecord("John", "Boyd", "01/01/2000", new String[0], new String[0]);
         // WHEN we update the medical record
         // THEN the updated medical record should throw an exception
-        Assertions.assertThrows(GatewayUnknownMedicalRecord.class, () -> service.updateMedicalRecord(medicalRecord));
+        Assertions.assertThrows(GatewayUnknownMedicalRecord.class, () -> center.updateMedicalRecord(medicalRecord));
     }
 
     @Test
@@ -65,7 +62,7 @@ class GatewayToMedicalServiceTest {
         // AND a medical record that exists
         final var medicalRecord = new GatewayMedicalRecord("John", "Doe", "01/01/2000", new String[0], new String[0]);
         // WHEN we delete the medical record
-        final var deletedMedicalRecord = service.deleteMedicalRecord(medicalRecord);
+        final var deletedMedicalRecord = center.deleteMedicalRecord(medicalRecord);
         // THEN the deleted medical record shouldn't be null
         Assertions.assertNotNull(deletedMedicalRecord);
     }
@@ -77,6 +74,6 @@ class GatewayToMedicalServiceTest {
         final var medicalRecord = new GatewayMedicalRecord("John", "Boyd", "01/01/2000", new String[0], new String[0]);
         // WHEN we delete the medical record
         // THEN the deleted medical record should throw an exception
-        Assertions.assertThrows(GatewayUnknownMedicalRecord.class, () -> service.deleteMedicalRecord(medicalRecord));
+        Assertions.assertThrows(GatewayUnknownMedicalRecord.class, () -> center.deleteMedicalRecord(medicalRecord));
     }
 }

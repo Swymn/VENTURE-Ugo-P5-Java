@@ -16,12 +16,11 @@ import org.springframework.context.annotation.ComponentScan;
 
 import java.util.ServiceLoader;
 
-@SpringBootApplication
-@ComponentScan(basePackages = { "fr.swynn.gateway" })
+@SpringBootApplication(scanBasePackages = { "fr.swynn.gateway.web", "fr.swynn.launcher" })
 public class SafetyNetApplication {
 
     private static final Logger LOGGER;
-
+    private static final String INFO_RUNNING;
     private static final String GATEWAY_LOADED;
     private static final String GATEWAY_LOADED_WITH_PROXY;
     private static Gateway gateway;
@@ -31,27 +30,22 @@ public class SafetyNetApplication {
 
     static {
         LOGGER = LoggerFactory.getLogger(SafetyNetApplication.class);
+        INFO_RUNNING = "SafetyNetApplication is running.";
         GATEWAY_LOADED = "Gateway is loaded.";
         GATEWAY_LOADED_WITH_PROXY = "Connection between Gateway and {} is established.";
     }
 
-    public static void main(final String[] args) {
+    protected SafetyNetApplication() {
+        LOGGER.info(INFO_RUNNING);
         initAllServices();
-        SpringApplication.run(SafetyNetApplication.class, args);
     }
 
     private static void initAllServices() {
-        gateway = initGateway();
         personaService = initPersonaService();
         firestationService = initFirestationService();
         medicalService = initMedicalService();
-    }
 
-    private static Gateway initGateway() {
-        final var loadedGateway = ServiceLoader.load(Gateway.class);
-        final var gateway = loadedGateway.findFirst().orElseThrow();
-        LOGGER.info(GATEWAY_LOADED);
-        return gateway;
+        gateway = initGateway();
     }
 
     private static PersonaService initPersonaService() {
@@ -75,7 +69,10 @@ public class SafetyNetApplication {
         return service;
     }
 
-    public static Gateway getGateway() {
+    private static Gateway initGateway() {
+        final var loadedGateway = ServiceLoader.load(Gateway.class);
+        final var gateway = loadedGateway.findFirst().orElseThrow();
+        LOGGER.info(GATEWAY_LOADED);
         return gateway;
     }
 
@@ -89,5 +86,13 @@ public class SafetyNetApplication {
 
     public static MedicalService getMedicalService() {
         return medicalService;
+    }
+
+    public static Gateway getGateway() {
+        return gateway;
+    }
+
+    public static void main(final String[] args) {
+        SpringApplication.run(SafetyNetApplication.class, args);
     }
 }
