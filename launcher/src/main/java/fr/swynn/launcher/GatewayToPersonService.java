@@ -8,6 +8,8 @@ import fr.swynn.persona.data.PersonaService;
 import fr.swynn.persona.impl.PersonAlreadyExist;
 import fr.swynn.persona.impl.UnknownPerson;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class GatewayToPersonService implements PersonServiceProxy {
@@ -22,8 +24,17 @@ public class GatewayToPersonService implements PersonServiceProxy {
     }
 
     private void loadPersonaService() {
-        final var service = ServiceLoader.load(PersonaService.class);
-        personaService = service.findFirst().orElseThrow();
+        personaService = SafetyNetApplication.getPersonaService();
+    }
+
+    @Override
+    public List<GatewayPersona> getPersonByAddress(final String address) {
+        final var personas = personaService.getPersonByAddress(address);
+        final var mappedPersonas = new ArrayList<GatewayPersona>();
+        for (final var persona : personas) {
+            mappedPersonas.add(mapper.map(persona));
+        }
+        return mappedPersonas;
     }
 
     @Override

@@ -18,6 +18,17 @@ class GatewayToPersonServiceTest {
     }
 
     @Test
+    void getPersonasByAddress_returnListOfPersona_defaultState() {
+        // GIVEN a persona service
+        final var address = "1509 Culver St";
+        // WHEN getting the personas by address
+        final var personas = service.getPersonByAddress(address);
+        // THEN the personas shouldn't be null
+        Assertions.assertNotNull(personas);
+        Assertions.assertEquals(2, personas.size());
+    }
+
+    @Test
     void deletePersona_returnPersona_existingPersona() throws GatewayUnknownPerson {
         // GIVEN a persona service
         // AND a persona

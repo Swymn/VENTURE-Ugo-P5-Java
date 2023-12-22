@@ -8,6 +8,7 @@ import fr.swynn.gateway.core.GatewayFirestation;
 import fr.swynn.gateway.core.GatewayFirestationAlreadyExist;
 import fr.swynn.gateway.core.GatewayUnknownFirestation;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class GatewayToFirestationService implements FirestationServiceProxy {
@@ -21,8 +22,16 @@ public class GatewayToFirestationService implements FirestationServiceProxy {
     }
 
     private void loadFirestationService() {
-        final var loadedService = ServiceLoader.load(FirestationService.class);
-        service = loadedService.findFirst().orElseThrow();
+        service = SafetyNetApplication.getFirestationService();
+    }
+
+    @Override
+    public List<String> getFirestationAddressByStationNumber(String station) throws GatewayUnknownFirestation {
+        try {
+            return service.getFirestationAddressByStationNumber(station);
+        } catch (final UnknownFirestation ex) {
+            throw new GatewayUnknownFirestation(ex.getAddress());
+        }
     }
 
     @Override

@@ -22,9 +22,21 @@ public class FakePersonaService implements PersonaService {
         persons.add(new Persona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com"));
         persons.add(new Persona("Jacob", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jacob.boyd@mail.com"));
         persons.add(new Persona("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
-        persons.add(new Persona("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
+        persons.add(new Persona("Roger", "Boyd", "1 rue de la Paix", "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
 
         return persons;
+    }
+
+    @Override
+    public List<Persona> getPersonByAddress(final String address) {
+        final var personas = new ArrayList<Persona>();
+        for (final var persona : persons) {
+            if (persona.address().equals(address)) {
+                personas.add(persona);
+            }
+        }
+
+        return personas;
     }
 
     @Override

@@ -25,6 +25,13 @@ public class SNPersonaService implements PersonaService {
     }
 
     @Override
+    public List<Persona> getPersonByAddress(String address) {
+        return personas.stream()
+                .filter(persona -> persona.address().equals(address))
+                .toList();
+    }
+
+    @Override
     public Persona deletePersona(final Persona persona) throws UnknownPerson {
         for (int i = 0; i < personas.size(); i++) {
             final var personaInList = personas.get(i);

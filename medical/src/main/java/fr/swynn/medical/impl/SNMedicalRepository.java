@@ -12,7 +12,7 @@ import java.util.List;
 public class SNMedicalRepository implements MedicalRepository {
 
     private static final String DATA_FILE = "data.json";
-    private static final String DATA_KEY = "medicalRecords";
+    private static final String DATA_KEY = "medicalrecords";
 
     private final JsonRepository jsonRepository;
 

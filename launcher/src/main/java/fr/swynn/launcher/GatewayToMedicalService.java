@@ -20,8 +20,7 @@ public class GatewayToMedicalService implements MedicalServiceProxy {
     }
 
     private void loadMedicalService() {
-        final var loadedService = ServiceLoader.load(MedicalService.class);
-        service = loadedService.findFirst().orElseThrow();
+        service = SafetyNetApplication.getMedicalService();
     }
 
     @Override

@@ -3,20 +3,14 @@ package fr.swynn.gateway.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class SafetyNetGateway implements Gateway {
-
-    private static final Logger LOGGER;
-    private static final String GATEWAY_LOADED_WITH_PROXY = "Gateway loaded with proxy: {}";
-
     private PersonServiceProxy personProxy;
     private FirestationServiceProxy firestationProxy;
     private MedicalServiceProxy medicalProxy;
-
-    static {
-        LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
-    }
 
     public SafetyNetGateway() {
         loadPersonProxy();
@@ -27,19 +21,16 @@ public class SafetyNetGateway implements Gateway {
     private void loadPersonProxy() {
         final var proxy = ServiceLoader.load(PersonServiceProxy.class);
         personProxy = proxy.findFirst().orElseThrow();
-        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, personProxy.getClass().getName());
     }
 
     private void loadFirestationProxy() {
         final var proxy = ServiceLoader.load(FirestationServiceProxy.class);
         firestationProxy = proxy.findFirst().orElseThrow();
-        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, firestationProxy.getClass().getName());
     }
 
     private void loadMedicalProxy() {
         final var proxy = ServiceLoader.load(MedicalServiceProxy.class);
         medicalProxy = proxy.findFirst().orElseThrow();
-        LOGGER.info(GATEWAY_LOADED_WITH_PROXY, medicalProxy.getClass().getName());
     }
 
     @Override
@@ -55,6 +46,19 @@ public class SafetyNetGateway implements Gateway {
     @Override
     public GatewayPersona createPerson(final GatewayPersona person) throws GatewayPersonAlreadyExist {
         return personProxy.createPerson(person);
+    }
+
+    @Override
+    public List<GatewayPersona> getPersonByStationNumber(String station) throws GatewayUnknownFirestation {
+        final var stationsAddress = firestationProxy.getFirestationAddressByStationNumber(station);
+        final var personas = new ArrayList<GatewayPersona>();
+
+        for (final var address : stationsAddress) {
+            final var currentPersonas = personProxy.getPersonByAddress(address);
+            personas.addAll(currentPersonas);
+        }
+
+        return personas;
     }
 
     @Override

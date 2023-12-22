@@ -32,6 +32,22 @@ public class FakeFirestationService implements FirestationService {
     }
 
     @Override
+    public List<String> getFirestationAddressByStationNumber(String station) throws UnknownFirestation {
+        final var addresses = new ArrayList<String>();
+        for (final var firestation : firestations) {
+            if (firestation.station().equals(station)) {
+                addresses.add(firestation.address());
+            }
+        }
+
+        if (addresses.isEmpty()) {
+            throw new UnknownFirestation(station);
+        }
+
+        return addresses;
+    }
+
+    @Override
     public Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);

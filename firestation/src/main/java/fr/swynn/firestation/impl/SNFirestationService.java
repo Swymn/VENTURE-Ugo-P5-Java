@@ -4,6 +4,7 @@ import fr.swynn.firestation.data.FirestationRepository;
 import fr.swynn.firestation.data.FirestationService;
 import fr.swynn.firestation.model.Firestation;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -22,6 +23,20 @@ public class SNFirestationService implements FirestationService {
     private void loadFirestationRepository() {
         final var firestationRepo = ServiceLoader.load(FirestationRepository.class);
         repository = firestationRepo.findFirst().orElseThrow();
+    }
+
+    @Override
+    public List<String> getFirestationAddressByStationNumber(String station) throws UnknownFirestation {
+        final var addresses = firestations.stream()
+                .filter(firestation -> firestation.station().equals(station))
+                .map(Firestation::address)
+                .toList();
+
+        if (addresses.isEmpty()) {
+            throw new UnknownFirestation(station);
+        }
+
+        return addresses;
     }
 
     @Override

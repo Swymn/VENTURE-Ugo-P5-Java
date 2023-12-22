@@ -5,6 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.ServiceLoader;
+
 @RestController
 public class FirestationController {
 
@@ -15,7 +18,18 @@ public class FirestationController {
     }
 
     private void loadGateway() {
-        gateway = new SafetyNetGateway();
+        final var loadedGateway = ServiceLoader.load(Gateway.class);
+        gateway = loadedGateway.findFirst().orElseThrow();
+    }
+
+    @GetMapping("/firestation")
+    public ResponseEntity<List<GatewayPersona>> getPersonByStationNumber(@RequestParam("stationNumber") final String station) {
+        try {
+            final var personas = gateway.getPersonByStationNumber(station);
+            return new ResponseEntity<>(personas, HttpStatus.OK);
+        } catch (final GatewayUnknownFirestation ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping("/firestation")

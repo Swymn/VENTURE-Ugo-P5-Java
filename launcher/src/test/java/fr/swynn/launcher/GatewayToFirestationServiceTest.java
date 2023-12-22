@@ -18,6 +18,26 @@ class GatewayToFirestationServiceTest {
     }
 
     @Test
+    void getFirestationAddress_returnListOfString_defaultState() throws GatewayUnknownFirestation {
+        // GIVEN a firestation service
+        final var station = "2";
+        // WHEN getting the firestation addresses
+        final var addresses = service.getFirestationAddressByStationNumber(station);
+        // THEN the addresses shouldn't be null
+        Assertions.assertNotNull(addresses);
+        Assertions.assertEquals(3, addresses.size());
+    }
+
+    @Test
+    void getFirestationAddress_throwUnknownFirestation_nonExistingFirestation() {
+        // GIVEN a firestation service
+        final var station = "4";
+        // WHEN getting the firestation addresses
+        // THEN the firestation service should throw an exception
+        Assertions.assertThrows(GatewayUnknownFirestation.class, () -> service.getFirestationAddressByStationNumber(station));
+    }
+
+    @Test
     void createFirestation_returnFirestation_nonExistingFirestation() throws GatewayFirestationAlreadyExist {
         // GIVEN a firestation service
         // AND a station

@@ -4,7 +4,11 @@ import fr.swynn.persona.impl.PersonAlreadyExist;
 import fr.swynn.persona.impl.UnknownPerson;
 import fr.swynn.persona.model.Persona;
 
+import java.util.List;
+
 public interface PersonaService {
+
+    List<Persona> getPersonByAddress(String address);
 
     Persona deletePersona(Persona persona) throws UnknownPerson;
 

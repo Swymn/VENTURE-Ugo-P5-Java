@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ServiceLoader;
+
 @RestController
 public class PersonController {
 
@@ -21,7 +23,8 @@ public class PersonController {
     }
 
     private void loadGateway() {
-        gateway = new SafetyNetGateway();
+        final var loadedGateway = ServiceLoader.load(Gateway.class);
+        gateway = loadedGateway.findFirst().orElseThrow();
     }
 
     @DeleteMapping("/person")

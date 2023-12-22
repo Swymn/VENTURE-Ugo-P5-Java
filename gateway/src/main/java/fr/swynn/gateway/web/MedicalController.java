@@ -17,7 +17,8 @@ public class MedicalController {
     }
 
     private void loadGateway() {
-        gateway = new SafetyNetGateway();
+        final var loadedGateway = ServiceLoader.load(Gateway.class);
+        gateway = loadedGateway.findFirst().orElseThrow();
     }
 
     @PostMapping("/medicalRecord")
