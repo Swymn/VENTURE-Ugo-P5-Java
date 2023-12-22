@@ -18,6 +18,7 @@
         <launcher.version>1.0-SNAPSHOT</launcher.version>
         <persona.version>1.0-SNAPSHOT</persona.version>
         <database.version>1.0-SNAPSHOT</database.version>
+        <inferno.version>1.0-SNAPSHOT</inferno.version>
 
         <springboot.version>3.2.0</springboot.version>
         <jackson.version>2.15.1</jackson.version>

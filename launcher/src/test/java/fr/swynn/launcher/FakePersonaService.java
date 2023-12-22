@@ -18,13 +18,13 @@ public class FakePersonaService implements PersonaService {
     }
 
     private List<Persona> getPersons() {
-        final List<Persona> gatewayPersons = new ArrayList<>();
-        gatewayPersons.add(new Persona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com"));
-        gatewayPersons.add(new Persona("Jacob", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jacob.boyd@mail.com"));
-        gatewayPersons.add(new Persona("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
-        gatewayPersons.add(new Persona("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
+        final List<Persona> persons = new ArrayList<>();
+        persons.add(new Persona("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com"));
+        persons.add(new Persona("Jacob", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jacob.boyd@mail.com"));
+        persons.add(new Persona("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
+        persons.add(new Persona("Roger", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
 
-        return gatewayPersons;
+        return persons;
     }
 
     @Override

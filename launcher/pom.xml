@@ -35,6 +35,12 @@
             <artifactId>persona</artifactId>
             <version>${persona.version}</version>
         </dependency>
+        <dependency>
+            <groupId>fr.swynn</groupId>
+            <artifactId>firestation</artifactId>
+            <version>${inferno.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

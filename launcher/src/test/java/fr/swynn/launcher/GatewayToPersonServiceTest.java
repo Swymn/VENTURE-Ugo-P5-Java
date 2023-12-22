@@ -3,14 +3,14 @@ package fr.swynn.launcher;
 import fr.swynn.gateway.core.GatewayPersonAlreadyExist;
 import fr.swynn.gateway.core.GatewayPersona;
 import fr.swynn.gateway.core.GatewayUnknownPerson;
-import fr.swynn.persona.model.Persona;
+import fr.swynn.gateway.core.PersonServiceProxy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GatewayToPersonServiceTest {
 
-    private GatewayToPersonService service;
+    private PersonServiceProxy service;
 
     @BeforeEach
     void setUp() {
