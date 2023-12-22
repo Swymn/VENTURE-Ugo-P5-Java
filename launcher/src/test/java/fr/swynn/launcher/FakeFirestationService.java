@@ -8,11 +8,11 @@ import fr.swynn.firestation.model.Firestation;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FakeInfernoService implements FirestationService {
+public class FakeFirestationService implements FirestationService {
 
     private final List<Firestation> firestations;
 
-    public FakeInfernoService() {
+    public FakeFirestationService() {
         firestations = getInfernos();
     }
 
@@ -32,7 +32,7 @@ public class FakeInfernoService implements FirestationService {
     }
 
     @Override
-    public Firestation deleteInferno(Firestation firestation) throws UnknownFirestation {
+    public Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestationInList.address().equals(firestation.address()) && firestationInList.station().equals(firestation.station())) {
@@ -45,7 +45,7 @@ public class FakeInfernoService implements FirestationService {
     }
 
     @Override
-    public Firestation updateInferno(Firestation firestation) throws UnknownFirestation {
+    public Firestation updateFirestation(Firestation firestation) throws UnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestationInList.address().equals(firestation.address()) && firestationInList.station().equals(firestation.station())) {
@@ -58,7 +58,7 @@ public class FakeInfernoService implements FirestationService {
     }
 
     @Override
-    public Firestation createInferno(Firestation firestation) throws FirestationAlreadyExist {
+    public Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist {
         for (final var firestationInList : firestations) {
             if (firestationInList.address().equals(firestation.address())) {
                 throw new FirestationAlreadyExist(firestation.address());

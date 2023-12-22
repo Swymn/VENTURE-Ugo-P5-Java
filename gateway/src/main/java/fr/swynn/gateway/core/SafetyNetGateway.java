@@ -53,4 +53,14 @@ public class SafetyNetGateway implements Gateway {
     public GatewayFirestation createFirestation(final GatewayFirestation firestation) throws GatewayFirestationAlreadyExist {
         return firestationProxy.createFirestation(firestation);
     }
+
+    @Override
+    public GatewayFirestation updateFirestation(final GatewayFirestation firestation) throws GatewayUnknownFirestation {
+        return firestationProxy.updateFirestation(firestation);
+    }
+
+    @Override
+    public GatewayFirestation deleteFirestation(final GatewayFirestation firestation) throws GatewayUnknownFirestation {
+        return firestationProxy.deleteFirestation(firestation);
+    }
 }

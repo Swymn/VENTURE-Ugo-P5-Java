@@ -34,4 +34,30 @@ public class FakeFirestationServiceProxy implements FirestationServiceProxy {
         firestations.add(firestation);
         return firestation;
     }
+
+    @Override
+    public GatewayFirestation updateFirestation(GatewayFirestation firestation) throws GatewayUnknownFirestation {
+        for (int i = 0; i < firestations.size(); i++) {
+            final var firestationInList = firestations.get(i);
+            if (firestationInList.address().equals(firestation.address())) {
+                firestations.set(i, firestation);
+                return firestation;
+            }
+        }
+
+        throw new GatewayUnknownFirestation(firestation.address());
+    }
+
+    @Override
+    public GatewayFirestation deleteFirestation(GatewayFirestation firestation) throws GatewayUnknownFirestation {
+        for (int i = 0; i < firestations.size(); i++) {
+            final var firestationInList = firestations.get(i);
+            if (firestationInList.address().equals(firestation.address())) {
+                firestations.remove(i);
+                return firestation;
+            }
+        }
+
+        throw new GatewayUnknownFirestation(firestation.address());
+    }
 }

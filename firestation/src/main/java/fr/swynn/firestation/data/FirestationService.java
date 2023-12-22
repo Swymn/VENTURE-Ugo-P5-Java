@@ -6,10 +6,10 @@ import fr.swynn.firestation.impl.UnknownFirestation;
 
 public interface FirestationService {
 
-    Firestation deleteInferno(Firestation firestation) throws UnknownFirestation;
+    Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation;
 
-    Firestation updateInferno(Firestation firestation) throws UnknownFirestation;
+    Firestation updateFirestation(Firestation firestation) throws UnknownFirestation;
 
-    Firestation createInferno(Firestation firestation) throws FirestationAlreadyExist;
+    Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
 
 }

@@ -25,7 +25,7 @@ public class SNFirestationService implements FirestationService {
     }
 
     @Override
-    public Firestation deleteInferno(final Firestation firestation) throws UnknownFirestation {
+    public Firestation deleteFirestation(final Firestation firestation) throws UnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestation.equals(firestationInList)) {
@@ -37,7 +37,7 @@ public class SNFirestationService implements FirestationService {
     }
 
     @Override
-    public Firestation updateInferno(final Firestation firestation) throws UnknownFirestation {
+    public Firestation updateFirestation(final Firestation firestation) throws UnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestation.equals(firestationInList)) {
@@ -50,7 +50,7 @@ public class SNFirestationService implements FirestationService {
     }
 
     @Override
-    public Firestation createInferno(final Firestation firestation) throws FirestationAlreadyExist {
+    public Firestation createFirestation(final Firestation firestation) throws FirestationAlreadyExist {
         for (final var firestationInList : firestations) {
             if (firestation.equals(firestationInList)) {
                 throw new FirestationAlreadyExist(firestation.address());
