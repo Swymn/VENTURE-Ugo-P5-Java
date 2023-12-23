@@ -4,8 +4,6 @@ import java.util.List;
 
 public interface Gateway {
 
-    List<GatewayPersona> getPersonByAddress(String address);
-
     GatewayPersona deletePerson(GatewayPersona person) throws GatewayUnknownPerson;
 
     GatewayPersona updatePerson(GatewayPersona person) throws GatewayUnknownPerson;
@@ -13,8 +11,6 @@ public interface Gateway {
     GatewayPersona createPerson(GatewayPersona person) throws GatewayPersonAlreadyExist;
 
     List<GatewayPersona> getPersonByStationNumber(String station) throws GatewayUnknownFirestation;
-
-    List<String> getFirestationAddressByStationNumber(String station) throws GatewayUnknownFirestation;
 
     GatewayFirestation createFirestation(GatewayFirestation firestation) throws GatewayFirestationAlreadyExist;
 

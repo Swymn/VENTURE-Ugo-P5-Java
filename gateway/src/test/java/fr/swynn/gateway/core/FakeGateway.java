@@ -49,17 +49,6 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
-    public List<GatewayPersona> getPersonByAddress(final String address) {
-        final var personas = new ArrayList<GatewayPersona>();
-        for (final var persona : persons) {
-            if (persona.address().equals(address)) {
-                personas.add(persona);
-            }
-        }
-        return personas;
-    }
-
-    @Override
     public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         for (int i = 0; i < persons.size(); i++) {
             final var personaInList = persons.get(i);
@@ -117,18 +106,6 @@ public class FakeGateway implements Gateway {
         }
 
         return personas;
-    }
-
-    @Override
-    public List<String> getFirestationAddressByStationNumber(String station) throws GatewayUnknownFirestation {
-        final var stationsAddress = firestations.stream()
-                .filter(firestation -> firestation.station().equals(station))
-                .map(GatewayFirestation::address)
-                .toList();
-
-        if (stationsAddress.isEmpty()) throw new GatewayUnknownFirestation(station);
-
-        return stationsAddress;
     }
 
     @Override

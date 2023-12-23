@@ -48,3 +48,54 @@ deactivate Gateway
 
 @enduml
 ----
+
+== Design ==
+
+The lauch is the focal point of the application. It will enable me to connect my services to each other. Below is a diagram that explains what I'm about to explain. The principle is as follows: each controller is associated with a service. To bridge the gap between these elements, we have GatewayToXService. These services implement the proxies for the services contained in the gateway and have their own dependencies on the services linked to the proxy.
+
+[plantuml]
+----
+@startuml
+
+package persona {
+    interface PersonaService
+}
+
+package firestation {
+    interface FirestationService
+}
+
+package medical {
+    interface MedicalService
+}
+
+package launcher {
+
+    class SafetyNetApplication
+
+    class GatewayObjectMapper
+
+    class GatewayToPersonService
+    class GatewayToFirestationService
+    class GatewayToMedicalService
+}
+
+package gateway {
+    interface PersonServiceProxy
+    interface FirestationServiceProxy
+    interface MedicalServiceProxy
+}
+
+GatewayToPersonService ..> GatewayObjectMapper
+GatewayToFirestationService ..> GatewayObjectMapper
+GatewayToMedicalService ..> GatewayObjectMapper
+
+GatewayToPersonService --|> PersonServiceProxy
+GatewayToFirestationService --|> FirestationServiceProxy
+GatewayToMedicalService --|> MedicalServiceProxy
+
+GatewayToPersonService ..> PersonaService
+GatewayToFirestationService ..> FirestationService
+GatewayToMedicalService ..> MedicalService
+@enduml
+----

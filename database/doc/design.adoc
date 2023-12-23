@@ -1,0 +1,6 @@
+= Database
+
+== Explanation
+
+The database module, although of little use in the context of this project, allows services to access the project data file. Nevertheless, this module has its place, because in the near future, if we imagine an update with a data persistence request from the controllers, it will be done right here.
+

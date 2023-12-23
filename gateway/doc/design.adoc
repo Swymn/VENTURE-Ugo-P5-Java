@@ -2,4 +2,65 @@
 
 == Explanation ==
 
-In our Spring Boot application, the Gateway module serves as the central point for handling all incoming requests and routing them to the appropriate controllers.
+In our Spring Boot application, the Gateway module serves as the central point for handling all incoming requests and routing them to the appropriate services.
+
+== Endpoints
+
+|===
+| Endpoint | Type
+
+| /firestation?stationNumber | GET
+| /firestation | POST
+| /firestation | PUT
+| /firestation | DELETE
+
+| /person | POST
+| /person | PUT
+| /person | DELETE
+
+| /medicalRecord | POST
+| /medicalRecord | PUT
+| /medicalRecord | DELETE
+|===
+
+== Design ==
+
+[plantuml]
+----
+@startuml
+
+package core {
+    interface PersonServiceProxy
+    interface FirestationServiceProxy
+    interface MedicalServiceProxy
+
+    interface Gateway
+    interface GatewayProxy {
+        Gateway getGateway();
+    }
+
+    class GatewayProvider
+    class SafetyNetGateway
+}
+
+package web {
+    class FirestationController
+    class MedicalController
+    class PersonController
+}
+
+PersonController ..> GatewayProxy
+FirestationController ..> GatewayProxy
+MedicalController ..> GatewayProxy
+GatewayProxy --> Gateway
+
+GatewayProxy --|> GatewayProvider : Implement
+Gateway --|> SafetyNetGateway : Implement
+
+SafetyNetGateway ..> PersonServiceProxy
+SafetyNetGateway ..> FirestationServiceProxy
+SafetyNetGateway ..> MedicalServiceProxy
+@enduml
+----
+
+The gateway contains only the functions associated with URLs exposed by controllers.

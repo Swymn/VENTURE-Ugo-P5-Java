@@ -55,11 +55,6 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
-    public List<GatewayPersona> getPersonByAddress(final String address) {
-        return personProxy.getPersonByAddress(address);
-    }
-
-    @Override
     public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         return personProxy.deletePerson(person);
     }
@@ -85,11 +80,6 @@ public class SafetyNetGateway implements Gateway {
         }
 
         return personas;
-    }
-
-    @Override
-    public List<String> getFirestationAddressByStationNumber(String station) throws GatewayUnknownFirestation {
-        return firestationProxy.getFirestationAddressByStationNumber(station);
     }
 
     @Override
