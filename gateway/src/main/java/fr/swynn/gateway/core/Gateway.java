@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface Gateway {
 
+    List<String> getCommunityEmail(String city);
+
     GatewayPersona deletePerson(GatewayPersona person) throws GatewayUnknownPerson;
 
     GatewayPersona updatePerson(GatewayPersona person) throws GatewayUnknownPerson;

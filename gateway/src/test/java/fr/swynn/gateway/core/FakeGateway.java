@@ -49,6 +49,18 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
+    public List<String> getCommunityEmail(final String city) {
+        final List<String> emails = new ArrayList<>();
+        for (final var persona : persons) {
+            if (persona.city().equals(city)) {
+                emails.add(persona.email());
+            }
+        }
+
+        return emails;
+    }
+
+    @Override
     public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         for (int i = 0; i < persons.size(); i++) {
             final var personaInList = persons.get(i);

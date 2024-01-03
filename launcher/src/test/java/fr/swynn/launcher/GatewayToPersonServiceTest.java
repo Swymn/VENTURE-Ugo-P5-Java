@@ -88,4 +88,28 @@ class GatewayToPersonServiceTest {
         Assertions.assertNotNull(personas);
         Assertions.assertEquals(2, personas.size());
     }
+
+    @Test
+    void getCommunityEmail_returnListOfEmail_existingCity() {
+        // GIVEN a persona service
+        // AND a city
+        final var city = "Culver";
+        // WHEN getting the emails by city
+        final var emails = service.getCommunityEmail(city);
+        // THEN the emails shouldn't be null
+        Assertions.assertNotNull(emails);
+        Assertions.assertEquals(3, emails.size());
+    }
+
+    @Test
+    void getCommunityEmail_returnEmptyListOfEmail_nonExistingCity() {
+        // GIVEN a persona service
+        // AND a city
+        final var city = "Paris";
+        // WHEN getting the emails by city
+        final var emails = service.getCommunityEmail(city);
+        // THEN the emails shouldn't be null
+        Assertions.assertNotNull(emails);
+        Assertions.assertEquals(0, emails.size());
+    }
 }

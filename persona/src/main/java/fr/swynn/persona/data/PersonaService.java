@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface PersonaService {
 
+    List<String> getCommunityEmail(String city);
+
     List<Persona> getPersonByAddress(String address);
 
     Persona deletePersona(Persona persona) throws UnknownPerson;

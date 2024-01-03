@@ -59,6 +59,11 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
+    public List<String> getCommunityEmail(String city) {
+        return personProxy.getCommunityEmail(city);
+    }
+
+    @Override
     public GatewayPersona deletePerson(final GatewayPersona person) throws GatewayUnknownPerson {
         return personProxy.deletePerson(person);
     }

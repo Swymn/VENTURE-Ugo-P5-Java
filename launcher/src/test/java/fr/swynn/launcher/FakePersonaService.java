@@ -28,6 +28,18 @@ public class FakePersonaService implements PersonaService {
     }
 
     @Override
+    public List<String> getCommunityEmail(String city) {
+        final var emails = new ArrayList<String>();
+        for (final var persona : persons) {
+            if (persona.city().equals(city)) {
+                emails.add(persona.email());
+            }
+        }
+
+        return emails;
+    }
+
+    @Override
     public List<Persona> getPersonByAddress(final String address) {
         final var personas = new ArrayList<Persona>();
         for (final var persona : persons) {

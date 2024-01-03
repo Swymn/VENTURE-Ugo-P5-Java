@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 @RestController
@@ -26,6 +27,12 @@ public class PersonController {
         final var gatewayLoader = ServiceLoader.load(GatewayProxy.class);
         final var gatewayProxy = gatewayLoader.findFirst().orElseThrow();
         gateway = gatewayProxy.getGateway();
+    }
+
+    @GetMapping("communityEmail")
+    public ResponseEntity<List<String>> getCommunityEmail(@RequestParam("city") final String city) {
+        final var communityEmail = gateway.getCommunityEmail(city);
+        return new ResponseEntity<>(communityEmail, HttpStatus.OK);
     }
 
     @DeleteMapping("/person")

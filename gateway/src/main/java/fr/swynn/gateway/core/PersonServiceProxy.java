@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface PersonServiceProxy {
 
+    List<String> getCommunityEmail(String city);
+
     List<GatewayPersona> getPersonByAddress(String address);
 
     GatewayPersona deletePerson(GatewayPersona person) throws GatewayUnknownPerson;

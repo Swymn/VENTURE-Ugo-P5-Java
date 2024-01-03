@@ -29,6 +29,11 @@ public class GatewayToPersonService implements PersonServiceProxy {
     }
 
     @Override
+    public List<String> getCommunityEmail(final String city) {
+        return personaService.getCommunityEmail(city);
+    }
+
+    @Override
     public List<GatewayPersona> getPersonByAddress(final String address) {
         final var personas = personaService.getPersonByAddress(address);
         final var mappedPersonas = new ArrayList<GatewayPersona>();

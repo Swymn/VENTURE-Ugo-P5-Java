@@ -92,4 +92,28 @@ class PersonaServiceTest {
         // THEN an exception is thrown
         Assertions.assertThrows(PersonAlreadyExist.class, () -> personaService.createPersona(persona));
     }
+
+    @Test
+    void getCommunityEmail_returnEmails_existingCity() {
+        // GIVEN a persona service
+        // AND a city
+        final var city = "Culver";
+        // WHEN we get the emails
+        final var emails = personaService.getCommunityEmail(city);
+        // THEN the emails are returned
+        Assertions.assertNotNull(emails);
+        Assertions.assertFalse(emails.isEmpty());
+    }
+
+    @Test
+    void getCommunityEmail_returnEmptyList_nonExistingCity() {
+        // GIVEN a persona service
+        // AND a city
+        final var city = "Paris";
+        // WHEN we get the emails
+        final var emails = personaService.getCommunityEmail(city);
+        // THEN the emails are returned
+        Assertions.assertNotNull(emails);
+        Assertions.assertTrue(emails.isEmpty());
+    }
 }

@@ -103,6 +103,36 @@ class PersonControllerTest {
         Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
     }
 
+    @Test
+    void getCommunityEmail_listOfMail_existingCity() {
+        // GIVEN a person controller
+        // AND a city
+        final var city = "Culver";
+        // WHEN the list of mail is requested
+        final var response = controller.getCommunityEmail(city);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of mail is returned
+        final var listOfMail = response.getBody();
+        Assertions.assertNotNull(listOfMail);
+        Assertions.assertFalse(listOfMail.isEmpty());
+    }
+
+    @Test
+    void getCommunityEmail_emptyList_nonExistingCity() {
+        // GIVEN a person controller
+        // AND a city
+        final var city = "Springfield";
+        // WHEN the list of mail is requested
+        final var response = controller.getCommunityEmail(city);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of mail is returned
+        final var listOfMail = response.getBody();
+        Assertions.assertNotNull(listOfMail);
+        Assertions.assertTrue(listOfMail.isEmpty());
+    }
+
     private GatewayPersona createGatewayPerson(final String firstName, final String lastName) {
         final var address = "1234 Main St";
         final var city = "Springfield";

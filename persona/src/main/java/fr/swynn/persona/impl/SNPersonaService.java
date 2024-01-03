@@ -36,6 +36,14 @@ public class SNPersonaService implements PersonaService {
     }
 
     @Override
+    public List<String> getCommunityEmail(final String city) {
+        return personas.stream()
+                .filter(persona -> persona.city().equals(city))
+                .map(Persona::email)
+                .toList();
+    }
+
+    @Override
     public List<Persona> getPersonByAddress(String address) {
         return personas.stream()
                 .filter(persona -> persona.address().equals(address))
