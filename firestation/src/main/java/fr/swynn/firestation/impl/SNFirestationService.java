@@ -3,6 +3,8 @@ package fr.swynn.firestation.impl;
 import fr.swynn.firestation.data.FirestationRepository;
 import fr.swynn.firestation.data.FirestationService;
 import fr.swynn.firestation.model.Firestation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +12,23 @@ import java.util.ServiceLoader;
 
 public class SNFirestationService implements FirestationService {
 
+    private static final Logger LOGGER;
+    private static final String SERVICE_LOADED;
+
     private FirestationRepository repository;
 
     private final List<Firestation> firestations;
+
+    static {
+        LOGGER = LoggerFactory.getLogger(SNFirestationService.class);
+        SERVICE_LOADED = "Firestation service is loaded.";
+    }
 
     public SNFirestationService() {
         loadFirestationRepository();
 
         firestations = repository.getAllfirestations();
+        LOGGER.info(SERVICE_LOADED);
     }
 
     private void loadFirestationRepository() {

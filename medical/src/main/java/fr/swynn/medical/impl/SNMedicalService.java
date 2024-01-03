@@ -3,19 +3,30 @@ package fr.swynn.medical.impl;
 import fr.swynn.medical.data.MedicalRepository;
 import fr.swynn.medical.data.MedicalService;
 import fr.swynn.medical.model.MedicalRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.ServiceLoader;
 
 public class SNMedicalService implements MedicalService {
 
+    private static final Logger LOGGER;
+    private static final String SERVICE_LOADED;
+
     private final List<MedicalRecord> medicalRecords;
     private MedicalRepository repository;
+
+    static {
+        LOGGER = LoggerFactory.getLogger(SNMedicalService.class);
+        SERVICE_LOADED = "Medical service is loaded.";
+    }
 
     public SNMedicalService() {
         loadMedicalRepository();
 
         medicalRecords = repository.getAllMedicalRecords();
+        LOGGER.info(SERVICE_LOADED);
     }
 
     private void loadMedicalRepository() {

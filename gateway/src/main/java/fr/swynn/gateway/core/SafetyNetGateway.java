@@ -10,7 +10,8 @@ import java.util.ServiceLoader;
 public class SafetyNetGateway implements Gateway {
 
     private static final Logger LOGGER;
-    private static final String GATEWAY_LOADED_WITH_PROXY = "Connection to Gateway loaded with {} proxy.";
+    private static final String GATEWAY_LOADED_WITH_PROXY;
+    private static final String GATEWAY_LOADED;
 
     private static Gateway instance;
 
@@ -20,6 +21,8 @@ public class SafetyNetGateway implements Gateway {
 
     static {
         LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
+        GATEWAY_LOADED_WITH_PROXY = "Connection to Gateway loaded with {} proxy.";
+        GATEWAY_LOADED = "Gateway instanced and loaded";
         instance = new SafetyNetGateway();
     }
 
@@ -34,6 +37,7 @@ public class SafetyNetGateway implements Gateway {
         loadPersonProxy();
         loadFirestationProxy();
         loadMedicalProxy();
+        LOGGER.info(GATEWAY_LOADED);
     }
 
     private void loadPersonProxy() {

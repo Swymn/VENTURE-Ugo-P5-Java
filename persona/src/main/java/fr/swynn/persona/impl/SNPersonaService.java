@@ -3,20 +3,31 @@ package fr.swynn.persona.impl;
 import fr.swynn.persona.data.PersonaRepository;
 import fr.swynn.persona.data.PersonaService;
 import fr.swynn.persona.model.Persona;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.ServiceLoader;
 
 public class SNPersonaService implements PersonaService {
 
+    private static final Logger LOGGER;
+    private static final String SERVICE_LOADED;
+
     private PersonaRepository repository;
 
     private final List<Persona> personas;
+
+    static {
+        LOGGER = LoggerFactory.getLogger(SNPersonaService.class);
+        SERVICE_LOADED = "Persona service is loaded.";
+    }
 
     public SNPersonaService() {
         loadPersonaRepository();
 
         personas = repository.getAllPersona();
+        LOGGER.info(SERVICE_LOADED);
     }
 
     private void loadPersonaRepository() {
