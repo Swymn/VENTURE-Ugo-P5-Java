@@ -17,6 +17,7 @@
         <jackson.version>2.15.1</jackson.version>
         <slf4j.version>2.0.9</slf4j.version>
         <logback.version>1.4.12</logback.version>
+        <junit.version>5.10.1</junit.version>
     </properties>
 
     <dependencies>
@@ -49,8 +50,29 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.1</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${springboot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <finalName>SafetyNet</finalName>
+                    <mainClass>fr.swynn.SafetyNetApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

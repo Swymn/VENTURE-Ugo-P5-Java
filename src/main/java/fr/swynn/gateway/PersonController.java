@@ -1,8 +1,6 @@
 package fr.swynn.gateway;
 
-import fr.swynn.core.PersonAlreadyExist;
-import fr.swynn.core.PersonService;
-import fr.swynn.core.UnknownPerson;
+import fr.swynn.core.*;
 import fr.swynn.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,30 +15,31 @@ import java.util.ServiceLoader;
 public class PersonController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
-    private static final String PERSON_NOT_FOUND = "Unable to find {} {}.";
+    private static final String PERSON_NOT_FOUND= "Unable to find {} {}.";
     private static final String PERSON_EXIST = "Person {} {} already exist.";
 
-    private PersonService service;
+    private Gateway gateway;
 
     public PersonController() {
-        loadPersonService();
+        loadGateway();
     }
 
-    private void loadPersonService() {
-        final var tempService = ServiceLoader.load(PersonService.class);
-        service = tempService.findFirst().orElseThrow(() -> new IllegalStateException("Unable to find PersonService."));
+    private void loadGateway() {
+        final var gatewayLoader = ServiceLoader.load(GatewayProxy.class);
+        final var gatewayProxy = gatewayLoader.findFirst().orElseThrow();
+        gateway = gatewayProxy.getGateway();
     }
 
     @GetMapping("communityEmail")
     public ResponseEntity<List<String>> getCommunityEmail(@RequestParam("city") final String city) {
-        final var communityEmail = service.getCommunityEmail(city);
+        final var communityEmail = gateway.getCommunityEmail(city);
         return new ResponseEntity<>(communityEmail, HttpStatus.OK);
     }
 
     @DeleteMapping("/person")
     public ResponseEntity<Person> deletePerson(@RequestBody final Person person) {
         try {
-            final var deletedPerson = service.deletePerson(person);
+            final var deletedPerson = gateway.deletePerson(person);
             return new ResponseEntity<>(deletedPerson, HttpStatus.OK);
         } catch (final UnknownPerson ex) {
             LOGGER.error(PERSON_NOT_FOUND, ex.getFirstName(), ex.getLastName());
@@ -51,7 +50,7 @@ public class PersonController {
     @PutMapping("/person")
     public ResponseEntity<Person> updatePerson(@RequestBody final Person person) {
         try {
-            final var updatedPerson = service.updatePerson(person);
+            final var updatedPerson = gateway.updatePerson(person);
             return new ResponseEntity<>(updatedPerson, HttpStatus.OK);
         } catch (final UnknownPerson ex) {
             LOGGER.error(PERSON_NOT_FOUND, ex.getFirstName(), ex.getLastName());
@@ -62,7 +61,7 @@ public class PersonController {
     @PostMapping("/person")
     public ResponseEntity<Person> createPerson(@RequestBody final Person person) {
         try {
-            final var createdPerson = service.createPerson(person);
+            final var createdPerson = gateway.createPerson(person);
             return new ResponseEntity<>(createdPerson, HttpStatus.CREATED);
         } catch (final PersonAlreadyExist ex) {
             LOGGER.error(PERSON_EXIST, ex.getFirstName(), ex.getLastName());
