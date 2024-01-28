@@ -1,12 +1,17 @@
 package core;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.Citizen;
+import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
 import fr.swynn.service.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -120,7 +125,7 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
-    public List<Person> getPersonByStationNumber(final String station) throws UnknownFirestation {
+    public CitizenPayload getPersonByStationNumber(final String station) throws UnknownFirestation {
         final var stationsAddress = new ArrayList<String>();
         for (final var firestation : firestations) {
             if (firestation.station().equals(station)) {
@@ -139,7 +144,53 @@ public class FakeGateway implements Gateway {
             }
         }
 
-        return personas;
+        final var citizens = new ArrayList<Citizen>();
+        var adultCount = 0;
+        var childCount = 0;
+
+        for (final var persona : personas) {
+            final var citizen = parsePersonToCitizen(persona);
+
+            if (isAdult(persona)) {
+                adultCount++;
+            } else {
+                childCount++;
+            }
+
+            citizens.add(citizen);
+        }
+
+        return new CitizenPayload(citizens, adultCount, childCount);
+    }
+
+    private Citizen parsePersonToCitizen(final Person person) {
+        return new Citizen(person.firstName(), person.lastName(), person.address(), person.phone());
+    }
+
+    private boolean isAdult(final Person person) {
+        try {
+            final var medicalRecord = getMedicalRecord(person.firstName(), person.lastName());
+            final var dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            final var birthDate = dateFormat.parse(medicalRecord.birthdate());
+
+            final var currentDate = Calendar.getInstance();
+            final var now = currentDate.getTime();
+
+            long ageInMillis = now.getTime() - birthDate.getTime();
+            long ageInYears = ageInMillis / (1000L * 60 * 60 * 24 * 365);
+
+            return ageInYears > 18;
+        } catch (final UnknownMedicalRecord |
+                       ParseException unknownMedicalRecord) {
+            return false;
+        }
+    }
+
+    private MedicalRecord getMedicalRecord(final String firstName, final String lastName) throws UnknownMedicalRecord {
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .findFirst()
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
     }
 
     @Override

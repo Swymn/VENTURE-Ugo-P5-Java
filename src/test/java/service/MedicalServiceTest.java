@@ -89,4 +89,28 @@ class MedicalServiceTest {
         // AND deleting the medical record again
         Assertions.assertThrows(UnknownMedicalRecord.class, () -> medicalService.deleteMedicalRecord(medicalRecord));
     }
+
+    @Test
+    void getMedicalRecord_returnMedicalRecord_existingMedicalRecord() {
+        // GIVEN a medical service
+        // AND a medical record
+        final var firstName = "John";
+        final var lastName = "Doe";
+
+        // WHEN getting the medical record
+        // THEN the method shouldn't throw an exception
+        Assertions.assertDoesNotThrow(() -> medicalService.getMedicalRecord(firstName, lastName));
+    }
+
+    @Test
+    void getMedicalRecord_throwException_unknownMedicalRecord() {
+        // GIVEN a medical service
+        // AND a medical record
+        final var firstName = "John";
+        final var lastName = "Boyd";
+
+        // WHEN getting the medical record
+        // THEN the method should throw an exception
+        Assertions.assertThrows(UnknownMedicalRecord.class, () -> medicalService.getMedicalRecord(firstName, lastName));
+    }
 }

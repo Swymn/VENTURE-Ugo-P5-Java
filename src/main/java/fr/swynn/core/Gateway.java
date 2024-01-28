@@ -1,5 +1,6 @@
 package fr.swynn.core;
 
+import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
@@ -17,7 +18,7 @@ public interface Gateway {
 
     Person createPerson(Person person) throws PersonAlreadyExist;
 
-    List<Person> getPersonByStationNumber(String station) throws UnknownFirestation;
+    CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation;
 
     Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
 

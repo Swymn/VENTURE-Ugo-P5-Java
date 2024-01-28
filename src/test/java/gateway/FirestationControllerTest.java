@@ -36,7 +36,7 @@ class FirestationControllerTest {
         // AND the list of the persons is returned
         final var returnedPersons = response.getBody();
         Assertions.assertNotNull(returnedPersons);
-        Assertions.assertEquals(3, returnedPersons.size());
+        Assertions.assertEquals(3, returnedPersons.citizens().size());
     }
 
     @Test

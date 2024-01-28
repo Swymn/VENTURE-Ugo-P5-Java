@@ -68,4 +68,12 @@ public class FakeMedicalService implements MedicalService {
 
         throw new UnknownMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName());
     }
+
+    @Override
+    public MedicalRecord getMedicalRecord(String firstName, String lastName) throws UnknownMedicalRecord {
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .findFirst()
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
+    }
 }

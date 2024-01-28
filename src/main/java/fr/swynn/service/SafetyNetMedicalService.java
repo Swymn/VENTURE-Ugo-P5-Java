@@ -67,4 +67,12 @@ public class SafetyNetMedicalService implements MedicalService {
         }
         throw new UnknownMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName());
     }
+
+    @Override
+    public MedicalRecord getMedicalRecord(final String firstName, final String lastName) throws UnknownMedicalRecord {
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .findFirst()
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
+    }
 }

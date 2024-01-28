@@ -12,4 +12,6 @@ public interface MedicalService {
 
     MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
 
+    MedicalRecord getMedicalRecord(String firstName, String lastName) throws UnknownMedicalRecord;
+
 }

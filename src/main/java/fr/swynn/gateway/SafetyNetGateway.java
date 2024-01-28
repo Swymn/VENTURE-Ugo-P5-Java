@@ -1,6 +1,8 @@
 package fr.swynn.gateway;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.Citizen;
+import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
@@ -8,7 +10,10 @@ import fr.swynn.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -17,6 +22,7 @@ public class SafetyNetGateway implements Gateway {
     private static final Logger LOGGER;
     private static final String GATEWAY_LOADED_WITH_PROXY;
     private static final String GATEWAY_LOADED;
+    private static final String DATE_FORMAT;
 
     private static Gateway instance;
 
@@ -28,7 +34,7 @@ public class SafetyNetGateway implements Gateway {
         LOGGER = LoggerFactory.getLogger(SafetyNetGateway.class);
         GATEWAY_LOADED_WITH_PROXY = "Connection to Gateway loaded with {} proxy.";
         GATEWAY_LOADED = "Gateway instanced and loaded";
-        instance = new SafetyNetGateway();
+        DATE_FORMAT = "dd/MM/yyyy";
     }
 
     public static Gateway getInstance() {
@@ -84,16 +90,59 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
-    public List<Person> getPersonByStationNumber(String station) throws UnknownFirestation {
+    public CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation {
         final var stationsAddress = firestationService.getFirestationAddressByStationNumber(station);
-        final List<Person> personas = new ArrayList<>();
+        final List<Person> persons = new ArrayList<>();
 
         for (final var address : stationsAddress) {
             final var currentPersonas = personService.getPersonByAddress(address);
-            personas.addAll(currentPersonas);
+            persons.addAll(currentPersonas);
         }
 
-        return personas;
+        return generateCitizenPayloadFromPersons(persons);
+    }
+
+    private CitizenPayload generateCitizenPayloadFromPersons(final List<Person> persons) {
+        final List<Citizen> citizens = new ArrayList<>();
+        var adultCount = 0;
+        var childCount = 0;
+
+        for (final var person : persons) {
+            final var citizen = parsePersonToCitizen(person);
+
+            if (isAdult(person)) {
+                adultCount++;
+            } else {
+                childCount++;
+            }
+
+            citizens.add(citizen);
+        }
+
+        return new CitizenPayload(citizens, adultCount, childCount);
+    }
+
+    private Citizen parsePersonToCitizen(final Person person) {
+        return new Citizen(person.firstName(), person.lastName(), person.address(), person.phone());
+    }
+
+    private boolean isAdult(final Person person) {
+        try {
+            final var medicalRecord = medicalService.getMedicalRecord(person.firstName(), person.lastName());
+            final var dateFormat = new SimpleDateFormat(DATE_FORMAT);
+            final var birthDate = dateFormat.parse(medicalRecord.birthdate());
+
+            final var currentDate = Calendar.getInstance();
+            final var now = currentDate.getTime();
+
+            long ageInMillis = now.getTime() - birthDate.getTime();
+            long ageInYears = ageInMillis / (1000L * 60 * 60 * 24 * 365);
+
+            return ageInYears > 18;
+        } catch (final UnknownMedicalRecord | ParseException unknownMedicalRecord) {
+            LOGGER.warn("Unable to find medical record for {} {}", person.firstName(), person.lastName());
+            return false;
+        }
     }
 
     @Override

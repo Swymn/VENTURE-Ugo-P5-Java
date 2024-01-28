@@ -119,7 +119,7 @@ class GatewayTest {
         final var expected = gateway.getPersonByStationNumber(station);
 
         // THEN the returned list contains 3 persons
-        Assertions.assertEquals(3, expected.size());
+        Assertions.assertEquals(3, expected.citizens().size());
     }
 
     @Test

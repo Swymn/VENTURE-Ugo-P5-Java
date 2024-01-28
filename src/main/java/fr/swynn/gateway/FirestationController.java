@@ -1,6 +1,7 @@
 package fr.swynn.gateway;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.Person;
 import fr.swynn.service.FirestationAlreadyExist;
@@ -28,10 +29,10 @@ public class FirestationController {
     }
 
     @GetMapping("/firestation")
-    public ResponseEntity<List<Person>> getPersonByStationNumber(@RequestParam("stationNumber") final String station) {
+    public ResponseEntity<CitizenPayload> getPersonByStationNumber(@RequestParam("stationNumber") final String station) {
         try {
-            final var personas = gateway.getPersonByStationNumber(station);
-            return new ResponseEntity<>(personas, HttpStatus.OK);
+            final var citizens = gateway.getPersonByStationNumber(station);
+            return new ResponseEntity<>(citizens, HttpStatus.OK);
         } catch (final UnknownFirestation ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
