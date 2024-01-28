@@ -2,6 +2,8 @@ package fr.swynn.gateway;
 
 import fr.swynn.core.*;
 import fr.swynn.model.Person;
+import fr.swynn.service.PersonAlreadyExist;
+import fr.swynn.service.UnknownPerson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

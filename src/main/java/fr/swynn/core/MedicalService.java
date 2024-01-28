@@ -1,6 +1,8 @@
 package fr.swynn.core;
 
 import fr.swynn.model.MedicalRecord;
+import fr.swynn.service.MedicalRecordAlreadyExist;
+import fr.swynn.service.UnknownMedicalRecord;
 
 public interface MedicalService {
 

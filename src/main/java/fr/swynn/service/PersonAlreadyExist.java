@@ -1,8 +1,8 @@
-package fr.swynn.core;
+package fr.swynn.service;
 
 import java.io.Serial;
 
-public class UnknownMedicalRecord extends Exception {
+public class PersonAlreadyExist extends Exception {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -10,8 +10,8 @@ public class UnknownMedicalRecord extends Exception {
     private final String firstName;
     private final String lastName;
 
-    public UnknownMedicalRecord(final String firstName, final String lastName) {
-        super("Unknown medical record for " + firstName + " " + lastName);
+    public PersonAlreadyExist(final String firstName, final String lastName) {
+        super(String.format("Person %s %s already exist", firstName, lastName));
         this.firstName = firstName;
         this.lastName = lastName;
     }

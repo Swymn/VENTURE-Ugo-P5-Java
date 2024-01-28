@@ -1,8 +1,10 @@
-package fr.swynn.core;
+package fr.swynn.gateway;
 
+import fr.swynn.core.*;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
+import fr.swynn.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +64,7 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
-    public List<String> getCommunityEmail(String city) {
+    public List<String> getCommunityEmail(final String city) {
         return personService.getCommunityEmail(city);
     }
 

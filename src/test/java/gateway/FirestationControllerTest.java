@@ -23,6 +23,35 @@ class FirestationControllerTest {
     }
 
     @Test
+    void getPersonByStationNumber_returnPersonList_existingFirestation() {
+        // GIVEN an inferno controller
+        final var firestationStation = "3";
+
+        // WHEN we get person by station number
+        final var response = controller.getPersonByStationNumber(firestationStation);
+
+        // THEN we receive an ok response
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // AND the list of the persons is returned
+        final var returnedPersons = response.getBody();
+        Assertions.assertNotNull(returnedPersons);
+        Assertions.assertEquals(3, returnedPersons.size());
+    }
+
+    @Test
+    void getPersonByStationNumber_returnNotFound_nonExistingFirestation() {
+        // GIVEN an inferno controller
+        final var firestationStation = "-10";
+
+        // WHEN we get person by station number
+        final var response = controller.getPersonByStationNumber(firestationStation);
+
+        // THEN we receive an not found response
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
     void createFirestation_returnFirestation_existingFirestation() {
         // GIVEN an inferno controller
         final var firestationAddress = "1 rue de la paix";

@@ -1,9 +1,7 @@
 package fr.swynn.service;
 
-import fr.swynn.core.FirestationAlreadyExist;
 import fr.swynn.core.FirestationRepository;
 import fr.swynn.core.FirestationService;
-import fr.swynn.core.UnknownFirestation;
 import fr.swynn.model.Firestation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

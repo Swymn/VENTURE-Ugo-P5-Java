@@ -1,14 +1,17 @@
-package fr.swynn.core;
+package fr.swynn.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import fr.swynn.core.JsonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
 public class DefaultJsonRepository implements JsonRepository {
+
+    private static final String FILENAME = "data.json";
 
     private static final Logger LOGGER;
     private static final String FILE_NOT_FOUND;
@@ -22,8 +25,8 @@ public class DefaultJsonRepository implements JsonRepository {
         MAPPER = new ObjectMapper();
     }
 
-    public DefaultJsonRepository(final String fileName) {
-        json = getJsonFile(fileName);
+    public DefaultJsonRepository() {
+        json = getJsonFile(FILENAME);
     }
 
     private JsonNode getJsonFile(final String fileName) {

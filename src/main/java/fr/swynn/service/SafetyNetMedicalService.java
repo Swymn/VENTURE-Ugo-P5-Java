@@ -1,9 +1,7 @@
 package fr.swynn.service;
 
-import fr.swynn.core.MedicalRecordAlreadyExist;
 import fr.swynn.core.MedicalRepository;
 import fr.swynn.core.MedicalService;
-import fr.swynn.core.UnknownMedicalRecord;
 import fr.swynn.model.MedicalRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

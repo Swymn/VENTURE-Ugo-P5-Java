@@ -1,19 +1,25 @@
-package fr.swynn.core;
+package fr.swynn.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import fr.swynn.core.FirestationRepository;
+import fr.swynn.core.JsonRepository;
 import fr.swynn.model.Firestation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 public class DefaultFirestationRepository implements FirestationRepository {
-
-    private static final String DATA_FILE = "data.json";
     private static final String KEY = "firestations";
-    private final JsonRepository jsonRepository;
+    private JsonRepository jsonRepository;
 
     public DefaultFirestationRepository() {
-        this.jsonRepository = new DefaultJsonRepository(DATA_FILE);
+        loadJsonRepository();
+    }
+
+    private void loadJsonRepository() {
+        final var proxy = ServiceLoader.load(JsonRepository.class);
+        jsonRepository = proxy.findFirst().orElseThrow();
     }
 
     @Override

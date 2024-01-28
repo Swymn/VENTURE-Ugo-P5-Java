@@ -1,6 +1,8 @@
 package fr.swynn.core;
 
 import fr.swynn.model.Person;
+import fr.swynn.service.PersonAlreadyExist;
+import fr.swynn.service.UnknownPerson;
 
 import java.util.List;
 

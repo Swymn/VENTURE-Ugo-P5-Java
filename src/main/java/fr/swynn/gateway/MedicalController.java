@@ -2,8 +2,8 @@ package fr.swynn.gateway;
 
 import fr.swynn.core.Gateway;
 import fr.swynn.core.GatewayProxy;
-import fr.swynn.core.MedicalRecordAlreadyExist;
-import fr.swynn.core.UnknownMedicalRecord;
+import fr.swynn.service.MedicalRecordAlreadyExist;
+import fr.swynn.service.UnknownMedicalRecord;
 import fr.swynn.model.MedicalRecord;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

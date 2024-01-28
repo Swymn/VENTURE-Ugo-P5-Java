@@ -1,4 +1,7 @@
-package fr.swynn.core;
+package fr.swynn.gateway;
+
+import fr.swynn.core.Gateway;
+import fr.swynn.core.GatewayProxy;
 
 public class GatewayProvider implements GatewayProxy {
 

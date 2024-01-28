@@ -1,19 +1,27 @@
-package fr.swynn.core;
+package fr.swynn.repository;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import fr.swynn.core.JsonRepository;
+import fr.swynn.core.PersonRepository;
 import fr.swynn.model.Person;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 
 public class DefaultPersonRepository implements PersonRepository {
-    private static final String DATA_FILE = "data.json";
     private static final String KEY = "persons";
 
-    private final JsonRepository jsonRepository;
+    private JsonRepository jsonRepository;
 
     public DefaultPersonRepository() {
-        this.jsonRepository = new DefaultJsonRepository(DATA_FILE);
+        loadJsonRepository();
+    }
+
+    private void loadJsonRepository() {
+        jsonRepository = ServiceLoader.load(JsonRepository.class)
+                .findFirst()
+                .orElseThrow();
     }
 
     @Override

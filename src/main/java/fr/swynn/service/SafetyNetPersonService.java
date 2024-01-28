@@ -1,9 +1,7 @@
 package fr.swynn.service;
 
-import fr.swynn.core.PersonAlreadyExist;
 import fr.swynn.core.PersonRepository;
 import fr.swynn.core.PersonService;
-import fr.swynn.core.UnknownPerson;
 import fr.swynn.model.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

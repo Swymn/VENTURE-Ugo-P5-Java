@@ -1,6 +1,8 @@
 package fr.swynn.core;
 
 import fr.swynn.model.Firestation;
+import fr.swynn.service.FirestationAlreadyExist;
+import fr.swynn.service.UnknownFirestation;
 
 import java.util.List;
 

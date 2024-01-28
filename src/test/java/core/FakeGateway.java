@@ -4,6 +4,7 @@ import fr.swynn.core.*;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
+import fr.swynn.service.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +23,29 @@ public class FakeGateway implements Gateway {
     }
 
     private List<Person> getPersons() {
-        final List<Person> gatewayPersons = new ArrayList<>();
-        gatewayPersons.add(new Person("John", "Doe", "1509 Baylee St",
+        final List<Person> persons = new ArrayList<>();
+        persons.add(new Person("John", "Doe", "1509 Baylee St",
                 "Washington", "15280", "841-874-6512", "john.doe@mail.com"));
-        gatewayPersons.add(new Person("Jacob", "Boyd", "1509 Culver St",
+        persons.add(new Person("Jacob", "Boyd", "1509 Culver St",
                 "Culver", "97451", "841-874-6512", "jacob.boyd@mail.com"));
-        gatewayPersons.add(new Person("Tenley", "Boyd", "1509 Culver St",
+        persons.add(new Person("Tenley", "Boyd", "1509 Culver St",
                 "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
-        gatewayPersons.add(new Person("Roger", "Boyd", "1509 Culver St",
+        persons.add(new Person("Roger", "Boyd", "1509 Culver St",
                 "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
 
-        return gatewayPersons;
+        return persons;
     }
 
     private List<Firestation> getFirestations() {
-        final List<Firestation> gatewayFirestations = new ArrayList<>();
-        gatewayFirestations.add(new Firestation("1509 Culver St", "3"));
-        gatewayFirestations.add(new Firestation("29 15th St", "2"));
-        gatewayFirestations.add(new Firestation("834 Binoc Ave", "3"));
-        gatewayFirestations.add(new Firestation("644 Gershwin Cir", "1"));
-        gatewayFirestations.add(new Firestation("748 Townings Dr", "3"));
-        gatewayFirestations.add(new Firestation("112 Steppes Pl", "3"));
+        final List<Firestation> firestations = new ArrayList<>();
+        firestations.add(new Firestation("1509 Culver St", "3"));
+        firestations.add(new Firestation("29 15th St", "2"));
+        firestations.add(new Firestation("834 Binoc Ave", "3"));
+        firestations.add(new Firestation("644 Gershwin Cir", "1"));
+        firestations.add(new Firestation("748 Townings Dr", "3"));
+        firestations.add(new Firestation("112 Steppes Pl", "3"));
 
-        return gatewayFirestations;
+        return firestations;
     }
 
     private List<MedicalRecord> getMedicalRecords() {

@@ -3,6 +3,7 @@ package fr.swynn.core;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
+import fr.swynn.service.*;
 
 import java.util.List;
 
