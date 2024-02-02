@@ -1,6 +1,6 @@
 package fr.swynn.gateway.core;
 
-public record GatewayMedicalRecord(String firstName, String lastName, String birthdate, String[] medications, String[] allergies) {
+public record GatewayMedicalRecord(String firstName, String lastName, String age, String[] medications, String[] allergies) {
 
     @Override
     public boolean equals(Object obj) {
@@ -16,7 +16,7 @@ public record GatewayMedicalRecord(String firstName, String lastName, String bir
         return "MedicalRecord{" +
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", birthdate='" + birthdate + '\'' +
+                ", age='" + age + '\'' +
                 ", medications=" + String.join(", ", medications) +
                 ", allergies=" + String.join(", ", allergies) +
                 '}';

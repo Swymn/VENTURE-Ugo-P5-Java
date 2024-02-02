@@ -21,7 +21,7 @@ class MedicalControllerTest {
 
     @Test
     void createMedicalRecord_returnMedicalRecord_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Boyd";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -39,14 +39,14 @@ class MedicalControllerTest {
         Assertions.assertNotNull(returnedMedicalRecord);
         Assertions.assertEquals(medicalRecordFirstName, returnedMedicalRecord.firstName());
         Assertions.assertEquals(medicalRecordLastName, returnedMedicalRecord.lastName());
-        Assertions.assertEquals(medicalRecordBirthdate, returnedMedicalRecord.birthdate());
+        Assertions.assertEquals(medicalRecordBirthdate, returnedMedicalRecord.age());
         Assertions.assertEquals(medicalRecordMedications, returnedMedicalRecord.medications());
         Assertions.assertEquals(medicalRecordAllergies, returnedMedicalRecord.allergies());
     }
 
     @Test
     void createMedicalRecord_returnConflict_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Doe";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -63,7 +63,7 @@ class MedicalControllerTest {
 
     @Test
     void updateMedicalRecord_returnMedicalRecord_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Doe";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -81,7 +81,7 @@ class MedicalControllerTest {
 
     @Test
     void updateMedicalRecord_returnNotFound_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Boyd";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -98,7 +98,7 @@ class MedicalControllerTest {
 
     @Test
     void deleteMedicalRecord_returnMedicalRecord_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Doe";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -115,7 +115,7 @@ class MedicalControllerTest {
 
     @Test
     void deleteMedicalRecord_returnNotFound_existingMedicalRecord() {
-        // GIVEN an inferno controller
+        // GIVEN a medical controller
         final var medicalRecordFirstName = "John";
         final var medicalRecordLastName = "Boyd";
         final var medicalRecordBirthdate = "03/06/1984";
@@ -128,5 +128,24 @@ class MedicalControllerTest {
         final var response = controller.deleteMedicalRecord(medicalRecord);
         // THEN we receive a not found response
         Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    void getMedicalRecord_returnMedicalRecord_existingMedicalRecord() {
+        // GIVEN a medical controller
+        // AND a firstName and lastName
+        final var medicalRecordFirstName = "John";
+        final var medicalRecordLastName = "Doe";
+
+        // WHEN we get a medicalRecord
+        final var response = controller.getMedicalRecords(medicalRecordFirstName, medicalRecordLastName);
+
+        // THEN we receive an ok response
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // AND the medicalRecord is returned
+        final var returnedMedicalRecord = response.getBody();
+        Assertions.assertNotNull(returnedMedicalRecord);
+        Assertions.assertFalse(returnedMedicalRecord.isEmpty());
     }
 }

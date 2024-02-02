@@ -26,10 +26,10 @@ public class GatewayObjectMapper {
     }
 
     public GatewayMedicalRecord map(final MedicalRecord medicalRecord) {
-        return new GatewayMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.birthdate(), medicalRecord.medications(), medicalRecord.allergies());
+        return new GatewayMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.age(), medicalRecord.medications(), medicalRecord.allergies());
     }
 
     public MedicalRecord map(final GatewayMedicalRecord medicalRecord) {
-        return new MedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.birthdate(), medicalRecord.medications(), medicalRecord.allergies());
+        return new MedicalRecord(medicalRecord.firstName(), medicalRecord.lastName(), medicalRecord.age(), medicalRecord.medications(), medicalRecord.allergies());
     }
 }

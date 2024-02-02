@@ -133,7 +133,7 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
-    public GatewayFirestation updateFirestation(GatewayFirestation firestation) throws GatewayUnknownFirestation {
+    public GatewayFirestation updateFirestation(final GatewayFirestation firestation) throws GatewayUnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestationInList.address().equals(firestation.address())) {
@@ -146,7 +146,7 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
-    public GatewayFirestation deleteFirestation(GatewayFirestation firestation) throws GatewayUnknownFirestation {
+    public GatewayFirestation deleteFirestation(final GatewayFirestation firestation) throws GatewayUnknownFirestation {
         for (int i = 0; i < firestations.size(); i++) {
             final var firestationInList = firestations.get(i);
             if (firestationInList.address().equals(firestation.address())) {
@@ -156,6 +156,14 @@ public class FakeGateway implements Gateway {
         }
 
         throw new GatewayUnknownFirestation(firestation.address());
+    }
+
+    @Override
+    public List<GatewayMedicalRecord> getMedicalRecords(final String firstName, final String lastName) {
+        // TODO: Verify if its actually the right way to do it
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .toList();
     }
 
     @Override

@@ -107,6 +107,11 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
+    public List<GatewayMedicalRecord> getMedicalRecords(final String firstName, final String lastName) {
+        return medicalProxy.getMedicalRecords(firstName, lastName);
+    }
+
+    @Override
     public GatewayMedicalRecord createMedicalRecord(final GatewayMedicalRecord medicalRecord) throws GatewayMedicalRecordAlreadyExist {
         return medicalProxy.createMedicalRecord(medicalRecord);
     }

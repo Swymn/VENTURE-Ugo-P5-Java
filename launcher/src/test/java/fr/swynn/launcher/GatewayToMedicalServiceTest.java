@@ -76,4 +76,16 @@ class GatewayToMedicalServiceTest {
         // THEN the deleted medical record should throw an exception
         Assertions.assertThrows(GatewayUnknownMedicalRecord.class, () -> service.deleteMedicalRecord(medicalRecord));
     }
+
+    @Test
+    void getMedicalRecords_listOfMedicalRecords_exisingMedicalRecords() {
+        // GIVEN a medical service
+        // AND a first and last name
+        final var firstName = "John";
+        final var lastName = "Doe";
+        // WHEN we get the medical records
+        final var medicalRecords = service.getMedicalRecords(firstName, lastName);
+        // THEN the medical records should not be empty
+        Assertions.assertFalse(medicalRecords.isEmpty());
+    }
 }

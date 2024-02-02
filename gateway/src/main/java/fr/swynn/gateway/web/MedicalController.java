@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 @RestController
@@ -20,6 +21,12 @@ public class MedicalController {
         final var gatewayLoader = ServiceLoader.load(GatewayProxy.class);
         final var gatewayProxy = gatewayLoader.findFirst().orElseThrow();
         gateway = gatewayProxy.getGateway();
+    }
+
+    @GetMapping("/personInfo")
+    public ResponseEntity<List<GatewayMedicalRecord>> getMedicalRecords(@RequestParam("firstName") final String firstName, @RequestParam("lastName") final String lastName) {
+        final var medicalRecords = gateway.getMedicalRecords(firstName, lastName);
+        return new ResponseEntity<>(medicalRecords, HttpStatus.OK);
     }
 
     @PostMapping("/medicalRecord")

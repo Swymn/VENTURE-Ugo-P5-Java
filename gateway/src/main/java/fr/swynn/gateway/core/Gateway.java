@@ -20,6 +20,8 @@ public interface Gateway {
 
     GatewayFirestation deleteFirestation(GatewayFirestation firestation) throws GatewayUnknownFirestation;
 
+    List<GatewayMedicalRecord> getMedicalRecords(String firstName, String lastName);
+
     GatewayMedicalRecord createMedicalRecord(GatewayMedicalRecord medicalRecord) throws GatewayMedicalRecordAlreadyExist;
 
     GatewayMedicalRecord updateMedicalRecord(GatewayMedicalRecord medicalRecord) throws GatewayUnknownMedicalRecord;

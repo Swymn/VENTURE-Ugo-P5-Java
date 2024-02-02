@@ -28,6 +28,14 @@ public class FakeMedicalRecordService implements MedicalService {
     }
 
     @Override
+    public List<MedicalRecord> getMedicalRecords(String firstName, String lastName) {
+        // TODO: Verify if it the actual behavior
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .toList();
+    }
+
+    @Override
     public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist {
         for (final var medicalRecordInList : medicalRecords) {
             if (medicalRecordInList.firstName().equals(medicalRecord.firstName()) && medicalRecordInList.lastName().equals(medicalRecord.lastName())) {

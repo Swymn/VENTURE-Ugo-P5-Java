@@ -35,6 +35,14 @@ public class SNMedicalService implements MedicalService {
     }
 
     @Override
+    public List<MedicalRecord> getMedicalRecords(final String firstName, final String lastName) {
+        // TODO: Verify if it the actual behavior
+        return medicalRecords.stream()
+                .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
+                .toList();
+    }
+
+    @Override
     public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist {
         for (final var medicalRecordInList : medicalRecords) {
             if (medicalRecord.equals(medicalRecordInList)) {

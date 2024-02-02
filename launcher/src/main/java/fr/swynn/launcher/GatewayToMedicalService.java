@@ -9,6 +9,7 @@ import fr.swynn.medical.impl.MedicalRecordAlreadyExist;
 import fr.swynn.medical.impl.UnknownMedicalRecord;
 import fr.swynn.persona.data.PersonaService;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 public class GatewayToMedicalService implements MedicalServiceProxy {
@@ -23,6 +24,12 @@ public class GatewayToMedicalService implements MedicalServiceProxy {
     private void loadMedicalService() {
         final var loadedService = ServiceLoader.load(MedicalService.class);
         service = loadedService.findFirst().orElseThrow();
+    }
+
+    @Override
+    public List<GatewayMedicalRecord> getMedicalRecords(String firstName, String lastName) {
+        final var medicalRecords = service.getMedicalRecords(firstName, lastName);
+        return medicalRecords.stream().map(mapper::map).toList();
     }
 
     @Override

@@ -6,6 +6,7 @@ import fr.swynn.database.impl.JsonRepositoryImpl;
 import fr.swynn.medical.data.MedicalRepository;
 import fr.swynn.medical.model.MedicalRecord;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,12 +38,29 @@ public class SNMedicalRepository implements MedicalRepository {
         final var medication = extractArray(json, "medications");
         final var allergies = extractArray(json, "allergies");
 
+        final var birthDate = json.get("birthdate").asText();
+        final var age = convertBirthDateToAge(birthDate);
+
         return new MedicalRecord(
                 json.get("firstName").asText(),
                 json.get("lastName").asText(),
-                json.get("birthdate").asText(),
+                age,
                 medication.toArray(new String[0]),
                 allergies.toArray(new String[0]));
+    }
+
+    private String convertBirthDateToAge(final String birthDate) {
+        final var currentDate = System.currentTimeMillis();
+
+        final var birthDateSplit = birthDate.split("/");
+        final var birthDateParsed = birthDateSplit[2] + "-" + birthDateSplit[0] + "-" + birthDateSplit[1];
+
+        final var birthDateObject = Date.valueOf(birthDateParsed);
+        final var birthDateInMilliseconds = birthDateObject.getTime();
+
+        final var age = (currentDate - birthDateInMilliseconds) / 1000 / 60 / 60 / 24 / 365;
+
+        return String.valueOf(age);
     }
 
     private List<String> extractArray(final JsonNode json, final String key) {
