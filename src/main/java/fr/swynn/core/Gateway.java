@@ -12,6 +12,8 @@ public interface Gateway {
 
     List<String> getCommunityEmail(String city);
 
+    List<String> getPhoneListByFirestation(String station);
+
     Person deletePerson(Person person) throws UnknownPerson;
 
     Person updatePerson(Person person) throws UnknownPerson;

@@ -146,6 +146,25 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
+    public List<String> getPhoneListByFirestation(String station) {
+        try {
+            final var stationsAddress = firestationService.getFirestationAddressByStationNumber(station);
+            final List<String> phoneList = new ArrayList<>();
+
+            for (final var address : stationsAddress) {
+                final var currentPersonas = personService.getPersonByAddress(address);
+                for (final var person : currentPersonas) {
+                    phoneList.add(person.phone());
+                }
+            }
+
+            return phoneList;
+        } catch (final UnknownFirestation unknownFirestation) {
+            return List.of();
+        }
+    }
+
+    @Override
     public Firestation createFirestation(final Firestation firestation) throws FirestationAlreadyExist {
         return firestationService.createFirestation(firestation);
     }

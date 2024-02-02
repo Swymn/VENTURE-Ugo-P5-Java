@@ -38,6 +38,12 @@ public class FirestationController {
         }
     }
 
+    @GetMapping("/phoneAlert")
+    public ResponseEntity<List<String>> getPhoneListByFirestation(@RequestParam("firestation") final String station) {
+        final var phoneList = gateway.getPhoneListByFirestation(station);
+        return new ResponseEntity<>(phoneList, HttpStatus.OK);
+    }
+
     @PostMapping("/firestation")
     public ResponseEntity<Firestation> createFirestation(@RequestBody() final Firestation firestation) {
         try {

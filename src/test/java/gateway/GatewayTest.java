@@ -133,6 +133,18 @@ class GatewayTest {
     }
 
     @Test
+    void getPhoneListByFirestation_returnListOfPhone_existingStation() {
+        // GIVEN a gateway and a station
+        final var station = "1";
+
+        // WHEN getPhoneListByFirestation is called
+        final var expected = gateway.getPhoneListByFirestation(station);
+
+        // THEN the returned list contains 3 phones
+        Assertions.assertEquals(3, expected.size());
+    }
+
+    @Test
     void deleteFirestation_shouldNotThrowError_existingFirestation() {
         // GIVEN a gateway and a firestation
         final var firestation = new Firestation("1509 Baylee St", "1");

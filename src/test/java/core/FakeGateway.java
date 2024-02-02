@@ -126,23 +126,7 @@ public class FakeGateway implements Gateway {
 
     @Override
     public CitizenPayload getPersonByStationNumber(final String station) throws UnknownFirestation {
-        final var stationsAddress = new ArrayList<String>();
-        for (final var firestation : firestations) {
-            if (firestation.station().equals(station)) {
-                stationsAddress.add(firestation.address());
-            }
-        }
-
-        if (stationsAddress.isEmpty()) throw new UnknownFirestation(station);
-
-        final var personas = new ArrayList<Person>();
-        for (final var address : stationsAddress) {
-            for (final var persona : persons) {
-                if (persona.address().equals(address)) {
-                    personas.add(persona);
-                }
-            }
-        }
+        final var personas = getPeopleByStation(station);
 
         final var citizens = new ArrayList<Citizen>();
         var adultCount = 0;
@@ -163,13 +147,38 @@ public class FakeGateway implements Gateway {
         return new CitizenPayload(citizens, adultCount, childCount);
     }
 
+    private List<String> getCoveredAddressByStation(final String station) throws UnknownFirestation {
+        final var stationsAddress =
+                firestations.stream().filter(firestation -> firestation.station().equals(station))
+                .map(Firestation::address)
+                .toList();
+
+        if (stationsAddress.isEmpty()) throw new UnknownFirestation(station);
+        return stationsAddress;
+    }
+
+    private ArrayList<Person> getPeopleByStation(String station) throws UnknownFirestation {
+        final var stationsAddress = getCoveredAddressByStation(station);
+        final var personas = new ArrayList<Person>();
+        for (final var address : stationsAddress) {
+            for (final var persona : persons) {
+                if (persona.address().equals(address)) {
+                    personas.add(persona);
+                }
+            }
+        }
+        return personas;
+    }
+
     private Citizen parsePersonToCitizen(final Person person) {
-        return new Citizen(person.firstName(), person.lastName(), person.address(), person.phone());
+        return new Citizen(person.firstName(), person.lastName(),
+                person.address(), person.phone());
     }
 
     private boolean isAdult(final Person person) {
         try {
-            final var medicalRecord = getMedicalRecord(person.firstName(), person.lastName());
+            final var medicalRecord = getMedicalRecord(person.firstName(),
+                    person.lastName());
             final var dateFormat = new SimpleDateFormat("dd/MM/yyyy");
             final var birthDate = dateFormat.parse(medicalRecord.birthdate());
 
@@ -186,11 +195,13 @@ public class FakeGateway implements Gateway {
         }
     }
 
-    private MedicalRecord getMedicalRecord(final String firstName, final String lastName) throws UnknownMedicalRecord {
+    private MedicalRecord getMedicalRecord(final String firstName,
+                                           final String lastName) throws UnknownMedicalRecord {
         return medicalRecords.stream()
                 .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
                 .findFirst()
-                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName,
+                        lastName));
     }
 
     @Override
@@ -270,6 +281,19 @@ public class FakeGateway implements Gateway {
 
         throw new UnknownMedicalRecord(medicalRecord.firstName(),
                 medicalRecord.lastName());
+    }
+
+    @Override
+    public List<String> getPhoneListByFirestation(final String station) {
+        try {
+            final List<String> coveredAddress = getCoveredAddressByStation(station);
+            return persons.stream()
+                    .filter(person -> coveredAddress.contains(person.address()))
+                    .map(Person::phone)
+                    .toList();
+        } catch (UnknownFirestation unknownFirestation) {
+            return new ArrayList<>();
+        }
     }
 }
 
