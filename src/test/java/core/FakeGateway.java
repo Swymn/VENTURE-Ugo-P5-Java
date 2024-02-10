@@ -1,6 +1,7 @@
 package core;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.ChildCitizen;
 import fr.swynn.dto.Citizen;
 import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
@@ -37,6 +38,8 @@ public class FakeGateway implements Gateway {
                 "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
         persons.add(new Person("Roger", "Boyd", "1509 Culver St",
                 "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
+        persons.add(new Person("Gwen", "Boyd", "1509 Baylee St",
+                "Culver", "97451", "841-874-6512", "gwen.boyd@mail.com"));
 
         return persons;
     }
@@ -70,6 +73,9 @@ public class FakeGateway implements Gateway {
                 new String[]{"naproxen:1000mg", "pharmacol:2500mg", "terazine" +
                         ":500mg", "noznazol:250mg"}, new String[]{"nillacilan"
         }));
+        medicalRecords.add(new MedicalRecord("Gwen", "Boyd", "03/06/2015",
+                new String[]{"aznol:350mg", "hydrapermazol:100mg"},
+                new String[]{"nillacilan"}));
 
         return medicalRecords;
     }
@@ -150,8 +156,8 @@ public class FakeGateway implements Gateway {
     private List<String> getCoveredAddressByStation(final String station) throws UnknownFirestation {
         final var stationsAddress =
                 firestations.stream().filter(firestation -> firestation.station().equals(station))
-                .map(Firestation::address)
-                .toList();
+                        .map(Firestation::address)
+                        .toList();
 
         if (stationsAddress.isEmpty()) throw new UnknownFirestation(station);
         return stationsAddress;
@@ -286,7 +292,8 @@ public class FakeGateway implements Gateway {
     @Override
     public List<String> getPhoneListByFirestation(final String station) {
         try {
-            final List<String> coveredAddress = getCoveredAddressByStation(station);
+            final List<String> coveredAddress =
+                    getCoveredAddressByStation(station);
             return persons.stream()
                     .filter(person -> coveredAddress.contains(person.address()))
                     .map(Person::phone)
@@ -294,6 +301,26 @@ public class FakeGateway implements Gateway {
         } catch (UnknownFirestation unknownFirestation) {
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public List<ChildCitizen> getChildrensByAddress(final String address) {
+        final var personsInsideHouse = persons.stream()
+                .filter(person -> person.address().equals(address)).toList();
+        final var childrenInsideHouse = personsInsideHouse.stream()
+                .filter(person -> !isAdult(person)).toList();
+        final var children = childrenInsideHouse.stream()
+                .map(person -> new ChildCitizen(person.firstName(), person.lastName(), getFamilyMembers(person)));
+
+        return children.toList();
+    }
+
+    private List<Citizen> getFamilyMembers(final Person person) {
+        return persons.stream()
+                .filter(p -> p.address().equals(person.address()))
+                .filter(p -> !p.firstName().equals(person.firstName()) && !p.lastName().equals(person.lastName()))
+                .map(p -> new Citizen(p.firstName(), p.lastName(), p.address(), p.phone()))
+                .toList();
     }
 }
 

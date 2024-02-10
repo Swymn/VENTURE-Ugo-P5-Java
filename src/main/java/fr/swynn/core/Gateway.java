@@ -1,5 +1,6 @@
 package fr.swynn.core;
 
+import fr.swynn.dto.ChildCitizen;
 import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
@@ -13,6 +14,8 @@ public interface Gateway {
     List<String> getCommunityEmail(String city);
 
     List<String> getPhoneListByFirestation(String station);
+
+    List<ChildCitizen> getChildrensByAddress(String address);
 
     Person deletePerson(Person person) throws UnknownPerson;
 

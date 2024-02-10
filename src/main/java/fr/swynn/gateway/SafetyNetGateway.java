@@ -1,6 +1,7 @@
 package fr.swynn.gateway;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.ChildCitizen;
 import fr.swynn.dto.Citizen;
 import fr.swynn.dto.CitizenPayload;
 import fr.swynn.model.Firestation;
@@ -90,7 +91,7 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
-    public CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation {
+    public CitizenPayload getPersonByStationNumber(final String station) throws UnknownFirestation {
         final var stationsAddress = firestationService.getFirestationAddressByStationNumber(station);
         final List<Person> persons = new ArrayList<>();
 
@@ -146,7 +147,26 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
-    public List<String> getPhoneListByFirestation(String station) {
+    public List<ChildCitizen> getChildrensByAddress(final String address) {
+        final var persons = personService.getPersonByAddress(address);
+
+        return persons.stream()
+                .filter(person -> !isAdult(person))
+                .map(child -> parsePersonToChildCitizen(child, persons))
+                .toList();
+    }
+
+    private ChildCitizen parsePersonToChildCitizen(final Person person, final List<Person> familyMembers) {
+        final var familyMembersWithoutChild = familyMembers.stream()
+                .filter(member -> !member.equals(person))
+                .map(member -> new Citizen(member.firstName(), member.lastName(), member.address(), member.phone()))
+                .toList();
+
+        return new ChildCitizen(person.firstName(), person.lastName(), familyMembersWithoutChild);
+    }
+
+    @Override
+    public List<String> getPhoneListByFirestation(final String station) {
         try {
             final var stationsAddress = firestationService.getFirestationAddressByStationNumber(station);
             final List<String> phoneList = new ArrayList<>();

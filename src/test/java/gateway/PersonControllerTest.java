@@ -51,7 +51,7 @@ class PersonControllerTest {
     @Test
     void updatePerson_existingPerson_defaultState() {
         // GIVEN a person controller
-        final var gatewayPerson = createGatewayPerson("John", "Doe");
+        final var gatewayPerson = createPerson("John", "Doe");
         // WHEN the person is updated
         final var response = controller.updatePerson(gatewayPerson);
 
@@ -69,7 +69,7 @@ class PersonControllerTest {
     @Test
     void updatePerson_unknownPerson_exception() {
         // GIVEN a person controller
-        final var gatewayPerson = createGatewayPerson("John", "Boyd");
+        final var gatewayPerson = createPerson("John", "Boyd");
         // WHEN an unknown person is updated
         final var response = controller.updatePerson(gatewayPerson);
         // THEN the controller should return not found code.
@@ -79,7 +79,7 @@ class PersonControllerTest {
     @Test
     void createPerson_newPerson_defaultState() {
         // GIVEN a person controller
-        final var gatewayPerson = createGatewayPerson("Roger", "Ronald");
+        final var gatewayPerson = createPerson("Roger", "Ronald");
         // WHEN a new person is created
         final var response = controller.createPerson(gatewayPerson);
 
@@ -97,7 +97,7 @@ class PersonControllerTest {
     @Test
     void createPerson_existingPerson_exception() {
         // GIVEN a person controller
-        final var gatewayPerson = createGatewayPerson("John", "Doe");
+        final var gatewayPerson = createPerson("John", "Doe");
         // WHEN an existing person is created
         final var response = controller.createPerson(gatewayPerson);
         // THEN the controller should return not found code.
@@ -134,7 +134,37 @@ class PersonControllerTest {
         Assertions.assertTrue(listOfMail.isEmpty());
     }
 
-    private Person createGatewayPerson(final String firstName, final String lastName) {
+    @Test
+    void getChildrenAlert_listOfChildren_existingAddress() {
+        // GIVEN a person controller
+        // AND an address
+        final var address = "1509 Baylee St";
+        // WHEN the list of children is requested
+        final var response = controller.getChildrenAlert(address);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of children is returned
+        final var listOfChildren = response.getBody();
+        Assertions.assertNotNull(listOfChildren);
+        Assertions.assertFalse(listOfChildren.isEmpty());
+    }
+
+    @Test
+    void getChildrenAlert_emptyList_nonExistingAddress() {
+        // GIVEN a person controller
+        // AND an address
+        final var address = "1234 Main St";
+        // WHEN the list of children is requested
+        final var response = controller.getChildrenAlert(address);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of children is returned
+        final var listOfChildren = response.getBody();
+        Assertions.assertNotNull(listOfChildren);
+        Assertions.assertTrue(listOfChildren.isEmpty());
+    }
+
+    private Person createPerson(final String firstName, final String lastName) {
         final var address = "1234 Main St";
         final var city = "Springfield";
         final var zip = "12345";
