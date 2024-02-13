@@ -2,6 +2,7 @@ package fr.swynn.gateway;
 
 import fr.swynn.core.*;
 import fr.swynn.dto.ChildCitizen;
+import fr.swynn.dto.DetailedCitizen;
 import fr.swynn.model.Person;
 import fr.swynn.service.PersonAlreadyExist;
 import fr.swynn.service.UnknownPerson;
@@ -37,6 +38,13 @@ public class PersonController {
     public ResponseEntity<List<String>> getCommunityEmail(@RequestParam("city") final String city) {
         final var communityEmail = gateway.getCommunityEmail(city);
         return new ResponseEntity<>(communityEmail, HttpStatus.OK);
+    }
+
+    @GetMapping("personInfo")
+    public ResponseEntity<List<DetailedCitizen>> getPersonByFirstAndLastName(@RequestParam("firtsName") final String firstName,
+                                                                             @RequestParam("lastName") final String lastName) {
+        final var persons = gateway.getPersonByFirstAndLastName(firstName, lastName);
+        return new ResponseEntity<>(persons, HttpStatus.OK);
     }
 
     @GetMapping("childAlert")

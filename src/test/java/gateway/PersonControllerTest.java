@@ -164,6 +164,38 @@ class PersonControllerTest {
         Assertions.assertTrue(listOfChildren.isEmpty());
     }
 
+    @Test
+    void getPersonByFirstAndLastName_listOfPersons_existingFirstAndLastName() {
+        // GIVEN a person controller
+        // AND a first and last name
+        final var firstName = "Gwen";
+        final var lastName = "Boyd";
+        // WHEN the list of persons is requested
+        final var response = controller.getPersonByFirstAndLastName(firstName, lastName);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of persons is returned
+        final var listOfPersons = response.getBody();
+        Assertions.assertNotNull(listOfPersons);
+        Assertions.assertFalse(listOfPersons.isEmpty());
+    }
+
+    @Test
+    void getPersonByFirstAndLastName_emptyList_nonExistingFirstAndLastName() {
+        // GIVEN a person controller
+        // AND a first and last name
+        final var firstName = "John";
+        final var lastName = "Boyd";
+        // WHEN the list of persons is requested
+        final var response = controller.getPersonByFirstAndLastName(firstName, lastName);
+        // THEN the response is OK
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        // AND the list of persons is returned
+        final var listOfPersons = response.getBody();
+        Assertions.assertNotNull(listOfPersons);
+        Assertions.assertTrue(listOfPersons.isEmpty());
+    }
+
     private Person createPerson(final String firstName, final String lastName) {
         final var address = "1234 Main St";
         final var city = "Springfield";

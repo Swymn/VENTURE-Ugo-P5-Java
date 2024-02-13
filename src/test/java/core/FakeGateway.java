@@ -95,6 +95,22 @@ public class FakeGateway implements Gateway {
     }
 
     @Override
+    public List<DetailedCitizen> getPersonByFirstAndLastName(final String firstName, final String lastName) {
+        return persons.stream()
+                .filter(person -> person.firstName().equals(firstName) && person.lastName().equals(lastName))
+                .map(person -> {
+                    try {
+                        final var medicalRecord = getMedicalRecord(person.firstName(), person.lastName());
+                        return new DetailedCitizen(person.firstName(), person.lastName(), person.address(), person.email(), medicalRecord.medications(), medicalRecord.allergies());
+                    } catch (UnknownMedicalRecord unknownMedicalRecord) {
+                        LOGGER.warn(NO_MEDICAL_RECORD_FOUND_FOR_AT, person.firstName(), person.lastName(), person.address());
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .toList();
+    }
+
+    @Override
     public Person deletePerson(final Person person) throws UnknownPerson {
         for (int i = 0; i < persons.size(); i++) {
             final var personaInList = persons.get(i);

@@ -60,6 +60,18 @@ public class FakePersonService implements PersonService {
     }
 
     @Override
+    public List<Person> getPersonByFirstAndLastName(String firstName, String lastName) {
+        final var personas = new ArrayList<Person>();
+        for (final var persona : persons) {
+            if (persona.firstName().equals(firstName) && persona.lastName().equals(lastName)) {
+                personas.add(persona);
+            }
+        }
+
+        return personas;
+    }
+
+    @Override
     public Person deletePerson(final Person person) throws UnknownPerson {
         for (int i = 0; i < persons.size(); i++) {
             final var personaInList = persons.get(i);

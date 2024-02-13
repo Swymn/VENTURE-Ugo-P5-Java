@@ -12,6 +12,8 @@ public interface PersonService {
 
     List<Person> getPersonByAddress(String address);
 
+    List<Person> getPersonByFirstAndLastName(String firstName, String lastName);
+
     Person deletePerson(Person persona) throws UnknownPerson;
 
     Person updatePerson(Person persona) throws UnknownPerson;

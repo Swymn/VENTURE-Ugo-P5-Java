@@ -117,4 +117,54 @@ class PersonServiceTest {
         Assertions.assertTrue(emails.isEmpty());
     }
 
+    @Test
+    void getPersonByAddress_returnPersons_existingAddress() {
+        // GIVEN a persona service
+        // AND an address
+        final var address = "1509 Baylee St";
+        // WHEN we get the persons
+        final var persons = personaService.getPersonByAddress(address);
+        // THEN the persons are returned
+        Assertions.assertNotNull(persons);
+        Assertions.assertFalse(persons.isEmpty());
+    }
+
+    @Test
+    void getPersonByAddress_returnEmptyList_nonExistingAddress() {
+        // GIVEN a persona service
+        // AND an address
+        final var address = "1509 Baylee St";
+        // WHEN we get the persons
+        final var persons = personaService.getPersonByAddress(address);
+        // THEN the persons are returned
+        Assertions.assertNotNull(persons);
+        Assertions.assertFalse(persons.isEmpty());
+    }
+
+    @Test
+    void getPersonByFirstAndLastName_returnPersons_existingFirstAndLastName() {
+        // GIVEN a persona service
+        // AND a first and last name
+        final var firstName = "John";
+        final var lastName = "Doe";
+        // WHEN we get the persons
+        final var persons = personaService.getPersonByFirstAndLastName(firstName, lastName);
+        // THEN the persons are returned
+        Assertions.assertNotNull(persons);
+        Assertions.assertFalse(persons.isEmpty());
+    }
+
+    @Test
+    void getPersonByFirstAndLastName_returnEmptyList_nonExistingFirstAndLastName() {
+        // GIVEN a persona service
+        // AND a first and last name
+        final var firstName = "John";
+        final var lastName = "Doe";
+        // WHEN we get the persons
+        final var persons = personaService.getPersonByFirstAndLastName(firstName, lastName);
+        // THEN the persons are returned
+        Assertions.assertNotNull(persons);
+        Assertions.assertFalse(persons.isEmpty());
+    }
+
 }

@@ -72,6 +72,25 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
+    public List<DetailedCitizen> getPersonByFirstAndLastName(final String firstName, final String lastName) {
+        final var persons = personService.getPersonByFirstAndLastName(firstName, lastName);
+        return persons.stream()
+                .map(this::parsePersonToDetailedCitizen)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private DetailedCitizen parsePersonToDetailedCitizen(final Person person) {
+        try {
+            final var medicalRecord = medicalService.getMedicalRecord(person.firstName(), person.lastName());
+            return new DetailedCitizen(person.firstName(), person.lastName(), person.address(), person.email(), medicalRecord.medications(), medicalRecord.allergies());
+        } catch (UnknownMedicalRecord unknownMedicalRecord) {
+            LOGGER.warn(UNABLE_TO_FIND_MEDICAL_RECORD_FOR, person.firstName(), person.lastName());
+            return null;
+        }
+    }
+
+    @Override
     public Person deletePerson(final Person person) throws UnknownPerson {
         return personService.deletePerson(person);
     }
