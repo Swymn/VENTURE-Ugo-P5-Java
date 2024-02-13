@@ -1,10 +1,10 @@
 package fr.swynn.gateway;
 
 import fr.swynn.core.*;
+import fr.swynn.dto.CitizenMedicalHistory;
 import fr.swynn.dto.CitizenPayload;
 import fr.swynn.dto.HomeFire;
 import fr.swynn.model.Firestation;
-import fr.swynn.model.Person;
 import fr.swynn.service.FirestationAlreadyExist;
 import fr.swynn.service.UnknownFirestation;
 import org.springframework.http.HttpStatus;
@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 @RestController
@@ -44,6 +45,17 @@ public class FirestationController {
         try {
             final var citizens = gateway.getPersonByStationNumber(station);
             return new ResponseEntity<>(citizens, HttpStatus.OK);
+        } catch (final UnknownFirestation ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/stations")
+    public ResponseEntity<Map<String, CitizenMedicalHistory[]>> getCitizenServedByStations(@RequestParam("stations") final String stations) {
+        try {
+            final var stationsList = stations.split(",");
+            final var citizenMedicalHistories = gateway.getCitizenServedByStations(stationsList);
+            return new ResponseEntity<>(citizenMedicalHistories, HttpStatus.OK);
         } catch (final UnknownFirestation ex) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

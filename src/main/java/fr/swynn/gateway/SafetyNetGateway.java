@@ -204,6 +204,11 @@ public class SafetyNetGateway implements Gateway {
     }
 
     @Override
+    public Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation {
+        throw new RuntimeException("Not implemented");
+    }
+
+    @Override
     public Firestation createFirestation(final Firestation firestation) throws FirestationAlreadyExist {
         return firestationService.createFirestation(firestation);
     }

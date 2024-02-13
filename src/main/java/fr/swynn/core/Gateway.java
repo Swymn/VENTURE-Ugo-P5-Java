@@ -1,6 +1,7 @@
 package fr.swynn.core;
 
 import fr.swynn.dto.ChildCitizen;
+import fr.swynn.dto.CitizenMedicalHistory;
 import fr.swynn.dto.CitizenPayload;
 import fr.swynn.dto.HomeFire;
 import fr.swynn.model.Firestation;
@@ -9,6 +10,7 @@ import fr.swynn.model.Person;
 import fr.swynn.service.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Gateway {
 
@@ -27,6 +29,8 @@ public interface Gateway {
     HomeFire getHomeFire(String address) throws UnknownFirestation;
 
     CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation;
+
+    Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation;
 
     Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
 

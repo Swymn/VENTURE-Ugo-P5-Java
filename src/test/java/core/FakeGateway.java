@@ -11,10 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class FakeGateway implements Gateway {
@@ -185,7 +183,7 @@ public class FakeGateway implements Gateway {
                 person.address(), person.phone());
     }
 
-    private boolean isAdult(final Person person) {
+    private int getAge(final Person person) {
         try {
             final var medicalRecord = getMedicalRecord(person.firstName(),
                     person.lastName());
@@ -198,11 +196,15 @@ public class FakeGateway implements Gateway {
             long ageInMillis = now.getTime() - birthDate.getTime();
             long ageInYears = ageInMillis / (1000L * 60 * 60 * 24 * 365);
 
-            return ageInYears > 18;
+            return (int) ageInYears;
         } catch (final UnknownMedicalRecord |
                        ParseException unknownMedicalRecord) {
-            return false;
+            return 0;
         }
+    }
+
+    private boolean isAdult(final Person person) {
+        return getAge(person) > 18;
     }
 
     private MedicalRecord getMedicalRecord(final String firstName,
@@ -212,6 +214,44 @@ public class FakeGateway implements Gateway {
                 .findFirst()
                 .orElseThrow(() -> new UnknownMedicalRecord(firstName,
                         lastName));
+    }
+
+    @Override
+    public Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation {
+        final var citizenMedicalHistories = new HashMap<String, CitizenMedicalHistory[]>();
+        final var addressCoveredByStation = getAddressCoveredByStations(stations);
+
+        for (final var address : addressCoveredByStation) {
+            final var personsInsideHouse = getPersonsInsideHouse(address);
+
+            citizenMedicalHistories.put(address, personsInsideHouse);
+        }
+
+        return citizenMedicalHistories;
+    }
+    private List<String> getAddressCoveredByStations(final String[] stations) throws UnknownFirestation {
+        final List<String> addressCoveredByStation = new ArrayList<>();
+        for (final var station : stations) {
+            final var addressCoveredByStationForStation = getCoveredAddressByStation(station);
+            addressCoveredByStation.addAll(addressCoveredByStationForStation);
+        }
+        return addressCoveredByStation;
+    }
+
+    private CitizenMedicalHistory[] getPersonsInsideHouse(final String address) {
+        return persons.stream()
+                .filter(person -> person.address().equals(address))
+                .map(person -> {
+                    try {
+                        final var medicalHistory = getMedicalHistory(person.firstName(), person.lastName());
+                        final var age = getAge(person);
+                        return new CitizenMedicalHistory(person.firstName(), person.lastName(), person.phone(), age, medicalHistory.medications(), medicalHistory.allergies());
+                    } catch (UnknownMedicalRecord unknownMedicalRecord) {
+                        LOGGER.warn(NO_MEDICAL_RECORD_FOUND_FOR_AT, person.firstName(), person.lastName(), address);
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .toArray(CitizenMedicalHistory[]::new);
     }
 
     @Override

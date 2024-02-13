@@ -191,4 +191,33 @@ class FirestationControllerTest {
         Assertions.assertNotNull(returnedFireAlert);
         Assertions.assertEquals(3, returnedFireAlert.peoples().size());
     }
+
+    @Test
+    void getCitizenServedByStations_returnMapAddressCitizens_existingFirestation() {
+        // GIVEN an inferno controller
+        final var firestationStation = "2,3";
+
+        // WHEN we get phone list by station number
+        final var response = controller.getCitizenServedByStations(firestationStation);
+
+        // THEN we receive an ok response
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // AND the list of the persons is returned
+        final var returnedCitizenServedByStations = response.getBody();
+        Assertions.assertNotNull(returnedCitizenServedByStations);
+        Assertions.assertEquals(5, returnedCitizenServedByStations.size());
+    }
+
+    @Test
+    void getCitizenServedByStations_returnNotFound_inexistingFirestation() {
+        // GIVEN an inferno controller
+        final var firestationStation = "2,3,4";
+
+        // WHEN we get phone list by station number
+        final var response = controller.getCitizenServedByStations(firestationStation);
+
+        // THEN we receive an ok response
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
