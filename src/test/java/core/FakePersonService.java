@@ -22,11 +22,16 @@ public class FakePersonService implements PersonService {
 
     private static List<Person> getPersons() {
         final List<Person> persons = new ArrayList<>();
-        persons.add(new Person("John", "Doe", "1509 Baylee St", "Washington", "15280", "841-874-6512", "john.doe@mail.com"));
-        persons.add(new Person("Jacob", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "jacob.boyd@mail.com"));
-        persons.add(new Person("Tenley", "Boyd", "1509 Culver St", "Culver", "97451", "841-874-6512", "tenley.boyd@mail.com"));
-        persons.add(new Person("Roger", "Boyd", "1 rue de la Paix", "Culver", "97451", "841-874-6512", "roger.boyd@mail.com"));
-
+        persons.add(new Person("John", "Doe", "1509 Baylee St", "Washington",
+                "15280", "841-874-6512", "john.doe@mail.com"));
+        persons.add(new Person("Jacob", "Boyd", "1509 Culver St", "Culver",
+                "97451", "841-874-6512", "jacob.boyd@mail.com"));
+        persons.add(new Person("Tenley", "Boyd", "1509 Culver St", "Culver",
+                "97451", "841-874-6512", "tenley.boyd@mail.com"));
+        persons.add(new Person("Roger", "Boyd", "1 rue de la Paix", "Culver",
+                "97451", "841-874-6512", "roger.boyd@mail.com"));
+        persons.add(new Person("Gwen", "Boyd", "1509 Baylee St",
+                "Culver", "97451", "841-874-6512", "gwen.boyd@mail.com"));
         return persons;
     }
 
@@ -68,7 +73,7 @@ public class FakePersonService implements PersonService {
     }
 
     @Override
-    public Person updatePerson(final Person person) throws UnknownPerson  {
+    public Person updatePerson(final Person person) throws UnknownPerson {
         for (int i = 0; i < persons.size(); i++) {
             final var personaInList = persons.get(i);
             if (personaInList.firstName().equals(person.firstName()) && personaInList.lastName().equals(person.lastName())) {
@@ -83,7 +88,8 @@ public class FakePersonService implements PersonService {
     public Person createPerson(final Person person) throws PersonAlreadyExist {
         for (final var personaInList : persons) {
             if (personaInList.firstName().equals(person.firstName()) && personaInList.lastName().equals(person.lastName())) {
-                throw new PersonAlreadyExist(person.firstName(), person.lastName());
+                throw new PersonAlreadyExist(person.firstName(),
+                        person.lastName());
             }
         }
 

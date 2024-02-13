@@ -23,10 +23,23 @@ public class FakeMedicalService implements MedicalService {
     private static List<MedicalRecord> getMedicalRecords() {
         final List<MedicalRecord> medicalRecords = new ArrayList<>();
 
-        medicalRecords.add(new MedicalRecord("John", "Doe", "03/06/1984", new String[]{"aznol:350mg", "hydrapermazol:100mg"}, new String[]{"nillacilan"}));
-        medicalRecords.add(new MedicalRecord("Jacob", "Boyd", "03/06/1989", new String[]{"pharmacol:5000mg", "terazine:10mg", "noznazol:250mg"}, new String[]{}));
-        medicalRecords.add(new MedicalRecord("Tenley", "Boyd", "03/06/1989", new String[]{"noxidian:100mg", "pharmacol:7500mg", "hydrapermazol:100mg", "pharmacol:1000mg"}, new String[]{"nillacilan"}));
-        medicalRecords.add(new MedicalRecord("Roger", "Boyd", "03/06/1989", new String[]{"naproxen:1000mg", "pharmacol:2500mg", "terazine:500mg", "noznazol:250mg"}, new String[]{"nillacilan"}));
+        medicalRecords.add(new MedicalRecord("John", "Doe", "03/06/1984",
+                new String[]{"aznol:350mg", "hydrapermazol:100mg"},
+                new String[]{"nillacilan"}));
+        medicalRecords.add(new MedicalRecord("Jacob", "Boyd", "03/06/1989",
+                new String[]{"pharmacol:5000mg", "terazine:10mg", "noznazol" +
+                        ":250mg"}, new String[]{}));
+        medicalRecords.add(new MedicalRecord("Tenley", "Boyd", "03/06/1989",
+                new String[]{"noxidian:100mg", "pharmacol:7500mg",
+                        "hydrapermazol:100mg", "pharmacol:1000mg"},
+                new String[]{"nillacilan"}));
+        medicalRecords.add(new MedicalRecord("Roger", "Boyd", "03/06/1989",
+                new String[]{"naproxen:1000mg", "pharmacol:2500mg", "terazine" +
+                        ":500mg", "noznazol:250mg"}, new String[]{"nillacilan"
+        }));
+        medicalRecords.add(new MedicalRecord("Gwen", "Boyd", "03/06/2015",
+                new String[]{"aznol:350mg", "hydrapermazol:100mg"},
+                new String[]{"nillacilan"}));
 
         return medicalRecords;
     }
@@ -35,7 +48,8 @@ public class FakeMedicalService implements MedicalService {
     public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist {
         for (final var medicalRecordInList : medicalRecords) {
             if (medicalRecordInList.firstName().equals(medicalRecord.firstName()) && medicalRecordInList.lastName().equals(medicalRecord.lastName())) {
-                throw new MedicalRecordAlreadyExist(medicalRecord.firstName(), medicalRecord.lastName());
+                throw new MedicalRecordAlreadyExist(medicalRecord.firstName()
+                        , medicalRecord.lastName());
             }
         }
 
@@ -53,7 +67,8 @@ public class FakeMedicalService implements MedicalService {
             }
         }
 
-        throw new UnknownMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName());
+        throw new UnknownMedicalRecord(medicalRecord.firstName(),
+                medicalRecord.lastName());
     }
 
     @Override
@@ -66,7 +81,8 @@ public class FakeMedicalService implements MedicalService {
             }
         }
 
-        throw new UnknownMedicalRecord(medicalRecord.firstName(), medicalRecord.lastName());
+        throw new UnknownMedicalRecord(medicalRecord.firstName(),
+                medicalRecord.lastName());
     }
 
     @Override
@@ -74,6 +90,7 @@ public class FakeMedicalService implements MedicalService {
         return medicalRecords.stream()
                 .filter(medicalRecord -> medicalRecord.firstName().equals(firstName) && medicalRecord.lastName().equals(lastName))
                 .findFirst()
-                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName,
+                        lastName));
     }
 }

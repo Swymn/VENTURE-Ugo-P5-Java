@@ -35,7 +35,7 @@ class GatewayTest {
         final var expected = gateway.getCommunityEmail(city);
 
         // THEN the returned list contains 23 emails
-        Assertions.assertEquals(3, expected.size());
+        Assertions.assertEquals(4, expected.size());
     }
 
     @Test
@@ -119,7 +119,7 @@ class GatewayTest {
         final var expected = gateway.getPersonByStationNumber(station);
 
         // THEN the returned list contains 3 persons
-        Assertions.assertEquals(3, expected.citizens().size());
+        Assertions.assertEquals(4, expected.citizens().size());
     }
 
     @Test
@@ -141,7 +141,7 @@ class GatewayTest {
         final var expected = gateway.getPhoneListByFirestation(station);
 
         // THEN the returned list contains 3 phones
-        Assertions.assertEquals(3, expected.size());
+        Assertions.assertEquals(4, expected.size());
     }
 
     @Test
@@ -262,5 +262,60 @@ class GatewayTest {
         // WHEN createMedicalRecord is called
         // THEN no error is thrown
         Assertions.assertThrows(MedicalRecordAlreadyExist.class , () -> gateway.createMedicalRecord(firestation));
+    }
+
+    @Test
+    void getHomeFire_returnHomeFire_existingAddress() throws UnknownFirestation {
+        // GIVEN a gateway and an address
+        final var address = "1509 Culver St";
+
+        // WHEN getHomeFire is called
+        final var expected = gateway.getHomeFire(address);
+
+        // THEN the returned homeFire contains 3 persons
+        Assertions.assertEquals(2, expected.peoples().size());
+    }
+
+    @Test
+    void getHomeFire_returnHomeFire_nonExistingAddress() {
+        // GIVEN a gateway and an address
+        final var address = "unknown";
+
+        // WHEN getHomeFire is called
+        // THEN an exception is thrown
+        Assertions.assertThrows(UnknownFirestation.class, () -> gateway.getHomeFire(address));
+    }
+    @Test
+    void getCitizenServedByStations_returnMapOfAddressCitizen_existingStations() throws UnknownFirestation {
+        // GIVEN a gateway and a list of stations
+        final var stations = new String[]{"1", "2"};
+
+        // WHEN getCitizenServedByStations is called
+        final var expected = gateway.getCitizenServedByStations(stations);
+
+        // THEN the returned map contains 5 addresses
+        Assertions.assertEquals(6, expected.size());
+    }
+
+    @Test
+    void getCitizenServedByStations_returnMapOfAddressCitizen_nonExistingStations() {
+        // GIVEN a gateway and a list of stations
+        final var stations = new String[]{"-1", "-2"};
+
+        // WHEN getCitizenServedByStations is called
+        // THEN an exception is thrown
+        Assertions.assertThrows(UnknownFirestation.class, () -> gateway.getCitizenServedByStations(stations));
+    }
+
+    @Test
+    void getChildrensByAddress_returnListOfChildrens_existingAddress() {
+        // GIVEN a gateway and an address
+        final var address = "1509 Baylee St";
+
+        // WHEN getChildrensByAddress is called
+        final var expected = gateway.getChildrensByAddress(address);
+
+        // THEN the returned list contains 2 childrens
+        Assertions.assertEquals(1, expected.size());
     }
 }

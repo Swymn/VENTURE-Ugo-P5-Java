@@ -124,6 +124,10 @@ public class SafetyNetGateway implements Gateway {
     }
 
     private boolean isAdult(final Person person) {
+        return getAge(person) > 18;
+    }
+
+    private int getAge(Person person) {
         try {
             final var medicalRecord = medicalService.getMedicalRecord(person.firstName(), person.lastName());
             final var dateFormat = new SimpleDateFormat(DATE_FORMAT);
@@ -135,10 +139,10 @@ public class SafetyNetGateway implements Gateway {
             long ageInMillis = now.getTime() - birthDate.getTime();
             long ageInYears = ageInMillis / (1000L * 60 * 60 * 24 * 365);
 
-            return ageInYears > 18;
+            return (int) ageInYears;
         } catch (final UnknownMedicalRecord | ParseException unknownMedicalRecord) {
             LOGGER.warn(UNABLE_TO_FIND_MEDICAL_RECORD_FOR, person.firstName(), person.lastName());
-            return false;
+            return 0;
         }
     }
 
@@ -205,7 +209,44 @@ public class SafetyNetGateway implements Gateway {
 
     @Override
     public Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation {
-        throw new RuntimeException("Not implemented");
+        final Map<String, CitizenMedicalHistory[]> citizenMedicalHistories = new HashMap<>();
+
+        final var addressesCoveredByStations = getCoveredAddressByStations(stations);
+
+        for (final var address : addressesCoveredByStations) {
+            final var persons = personService.getPersonByAddress(address);
+            final var citizens = getPersonsInsideHouse(persons, address);
+
+            citizenMedicalHistories.put(address, citizens);
+        }
+
+        return citizenMedicalHistories;
+    }
+
+    private CitizenMedicalHistory[] getPersonsInsideHouse(final List<Person> persons, final String address) {
+        return persons.stream()
+                .filter(person -> person.address().equals(address))
+                .map(person -> {
+                    try {
+                        final var medicalHistory = medicalService.getMedicalRecord(person.firstName(), person.lastName());
+                        final var age = getAge(person);
+                        return new CitizenMedicalHistory(person.firstName(), person.lastName(), person.phone(), age, medicalHistory.medications(), medicalHistory.allergies());
+                    } catch (UnknownMedicalRecord unknownMedicalRecord) {
+                        LOGGER.warn(UNABLE_TO_FIND_MEDICAL_RECORD_FOR, person.firstName(), person.lastName(), address);
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .toArray(CitizenMedicalHistory[]::new);
+    }
+
+    private List<String> getCoveredAddressByStations(final String[] stations) throws UnknownFirestation {
+        final List<String> stationsAddress = new ArrayList<>();
+        for (final var station : stations) {
+            final var currentStationAddresses = firestationService.getFirestationAddressByStationNumber(station);
+            stationsAddress.addAll(currentStationAddresses);
+        }
+
+        return stationsAddress;
     }
 
     @Override
