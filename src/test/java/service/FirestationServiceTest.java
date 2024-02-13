@@ -111,4 +111,26 @@ class FirestationServiceTest {
         // THEN the firestation is deleted, no exception is thrown
         Assertions.assertThrows(UnknownFirestation.class, () -> firestationService.getFirestationAddressByStationNumber(station));
     }
+
+    @Test
+    void getFirestationNumbverByAddress_shouldReturnStationNumber_existingAddress() throws UnknownFirestation {
+        // GIVEN a firestation service and a firestation
+        final var address = "1509 Culver St";
+
+        // WHEN deleting the firestation
+        final var station = firestationService.getFirestationNumberByAddress(address);
+
+        // THEN the firestation is deleted, no exception is thrown
+        Assertions.assertEquals("3", station);
+    }
+
+    @Test
+    void getFirestationNumbverByAddress_throwException_nonExistingAddress() {
+        // GIVEN a firestation service and a firestation
+        final var address = "random address";
+
+        // WHEN deleting the firestation
+        // THEN the firestation is deleted, no exception is thrown
+        Assertions.assertThrows(UnknownFirestation.class, () -> firestationService.getFirestationNumberByAddress(address));
+    }
 }

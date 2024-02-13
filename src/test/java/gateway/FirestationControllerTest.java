@@ -174,4 +174,21 @@ class FirestationControllerTest {
         Assertions.assertNotNull(returnedPhoneNumbers);
         Assertions.assertEquals(3, returnedPhoneNumbers.size());
     }
+
+    @Test
+    void fireAlert_returnPerson_existingAddress() {
+        // GIVEN an inferno controller
+        final var firestationAddress = "1509 Culver St";
+
+        // WHEN we get phone list by station number
+        final var response = controller.fireAlert(firestationAddress);
+
+        // THEN we receive an ok response
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // AND the list of the persons is returned
+        final var returnedFireAlert = response.getBody();
+        Assertions.assertNotNull(returnedFireAlert);
+        Assertions.assertEquals(3, returnedFireAlert.peoples().size());
+    }
 }

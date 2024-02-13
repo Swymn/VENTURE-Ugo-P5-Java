@@ -84,4 +84,13 @@ public class SafetyNetFirestationService implements FirestationService {
         firestations.add(firestation);
         return firestation;
     }
+
+    @Override
+    public String getFirestationNumberByAddress(final String address) throws UnknownFirestation {
+        return firestations.stream()
+                .filter(firestation -> firestation.address().equals(address))
+                .findFirst()
+                .map(Firestation::station)
+                .orElseThrow(() -> new UnknownFirestation(address));
+    }
 }

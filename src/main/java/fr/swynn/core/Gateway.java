@@ -2,6 +2,7 @@ package fr.swynn.core;
 
 import fr.swynn.dto.ChildCitizen;
 import fr.swynn.dto.CitizenPayload;
+import fr.swynn.dto.HomeFire;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
@@ -22,6 +23,8 @@ public interface Gateway {
     Person updatePerson(Person person) throws UnknownPerson;
 
     Person createPerson(Person person) throws PersonAlreadyExist;
+
+    HomeFire getHomeFire(String address) throws UnknownFirestation;
 
     CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation;
 

@@ -14,4 +14,6 @@ public interface FirestationService {
     Firestation updateFirestation(Firestation firestation) throws UnknownFirestation;
 
     Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
+
+    String getFirestationNumberByAddress(String address) throws UnknownFirestation;
 }

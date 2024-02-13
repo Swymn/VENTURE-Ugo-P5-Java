@@ -1,22 +1,26 @@
 package core;
 
 import fr.swynn.core.*;
-import fr.swynn.dto.ChildCitizen;
-import fr.swynn.dto.Citizen;
-import fr.swynn.dto.CitizenPayload;
+import fr.swynn.dto.*;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
 import fr.swynn.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 
 public class FakeGateway implements Gateway {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(FakeGateway.class);
+    public static final String NO_MEDICAL_RECORD_FOUND_FOR_AT = "No medical record found for {} {} at {}";
 
     private final List<Person> persons;
     private final List<Firestation> firestations;
@@ -321,6 +325,38 @@ public class FakeGateway implements Gateway {
                 .filter(p -> !p.firstName().equals(person.firstName()) && !p.lastName().equals(person.lastName()))
                 .map(p -> new Citizen(p.firstName(), p.lastName(), p.address(), p.phone()))
                 .toList();
+    }
+
+    @Override
+    public HomeFire getHomeFire(String address) throws UnknownFirestation {
+        final var firestation = firestations.stream()
+                .filter(firestation1 -> firestation1.address().equals(address))
+                .findFirst()
+                .orElseThrow(() -> new UnknownFirestation(address));
+
+        final var personsInsideHouse = persons.stream()
+                .filter(person -> person.address().equals(address))
+                .map(person -> {
+                    try {
+                        final var medicalHistory = getMedicalHistory(person.firstName(), person.lastName());
+                        return new HomePeople(person.firstName(), person.lastName(), person.phone(), medicalHistory.medications(), medicalHistory.allergies());
+                    } catch (UnknownMedicalRecord e) {
+                        LOGGER.warn(NO_MEDICAL_RECORD_FOUND_FOR_AT, person.firstName(), person.lastName(), address);
+                        return null;
+                    }
+                }).filter(Objects::nonNull)
+                .toList();
+
+        return new HomeFire(personsInsideHouse, firestation.station());
+    }
+
+    private MedicalHistory getMedicalHistory(final String firstName, final String lastName) throws UnknownMedicalRecord{
+        final var medicalRecord = medicalRecords.stream()
+                .filter(record -> record.firstName().equals(firstName) && record.lastName().equals(lastName))
+                .findFirst()
+                .orElseThrow(() -> new UnknownMedicalRecord(firstName, lastName));
+
+        return new MedicalHistory(medicalRecord.medications(), medicalRecord.allergies());
     }
 }
 

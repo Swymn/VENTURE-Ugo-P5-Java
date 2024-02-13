@@ -1,9 +1,7 @@
 package fr.swynn.gateway;
 
 import fr.swynn.core.*;
-import fr.swynn.dto.ChildCitizen;
-import fr.swynn.dto.Citizen;
-import fr.swynn.dto.CitizenPayload;
+import fr.swynn.dto.*;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
@@ -13,10 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public class SafetyNetGateway implements Gateway {
 
@@ -24,6 +19,7 @@ public class SafetyNetGateway implements Gateway {
     private static final String GATEWAY_LOADED_WITH_PROXY;
     private static final String GATEWAY_LOADED;
     private static final String DATE_FORMAT;
+    public static final String UNABLE_TO_FIND_MEDICAL_RECORD_FOR = "Unable to find medical record for {} {}";
 
     private static Gateway instance;
 
@@ -141,7 +137,7 @@ public class SafetyNetGateway implements Gateway {
 
             return ageInYears > 18;
         } catch (final UnknownMedicalRecord | ParseException unknownMedicalRecord) {
-            LOGGER.warn("Unable to find medical record for {} {}", person.firstName(), person.lastName());
+            LOGGER.warn(UNABLE_TO_FIND_MEDICAL_RECORD_FOR, person.firstName(), person.lastName());
             return false;
         }
     }
@@ -181,6 +177,29 @@ public class SafetyNetGateway implements Gateway {
             return phoneList;
         } catch (final UnknownFirestation unknownFirestation) {
             return List.of();
+        }
+    }
+
+    @Override
+    public HomeFire getHomeFire(final String address) throws UnknownFirestation {
+        final var firestationNumber = firestationService.getFirestationNumberByAddress(address);
+        final var persons = personService.getPersonByAddress(address);
+
+        final var homePeople = persons.stream()
+                .map(this::parsePersonToHomePeople)
+                .filter(Objects::nonNull)
+                .toList();
+
+        return new HomeFire(homePeople, firestationNumber);
+    }
+
+    private HomePeople parsePersonToHomePeople(final Person person) {
+        try {
+            final var medicalRecord = medicalService.getMedicalRecord(person.firstName(), person.lastName());
+            return new HomePeople(person.firstName(), person.lastName(), person.phone(), medicalRecord.medications(), medicalRecord.allergies());
+        } catch (final UnknownMedicalRecord unknownMedicalRecord) {
+            LOGGER.warn(UNABLE_TO_FIND_MEDICAL_RECORD_FOR, person.firstName(), person.lastName());
+            return null;
         }
     }
 

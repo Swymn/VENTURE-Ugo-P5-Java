@@ -2,6 +2,7 @@ package fr.swynn.gateway;
 
 import fr.swynn.core.*;
 import fr.swynn.dto.CitizenPayload;
+import fr.swynn.dto.HomeFire;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.Person;
 import fr.swynn.service.FirestationAlreadyExist;
@@ -26,6 +27,16 @@ public class FirestationController {
         final var gatewayLoader = ServiceLoader.load(GatewayProxy.class);
         final var gatewayProxy = gatewayLoader.findFirst().orElseThrow();
         gateway = gatewayProxy.getGateway();
+    }
+
+    @GetMapping("/fire")
+    public ResponseEntity<HomeFire> fireAlert(@RequestParam("address") final String address) {
+        try {
+            final var homeFire = gateway.getHomeFire(address);
+            return new ResponseEntity<>(homeFire, HttpStatus.OK);
+        } catch (final UnknownFirestation ex) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/firestation")
