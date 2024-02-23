@@ -1,7 +1,7 @@
 package repository;
 
-import fr.swynn.core.PersonRepository;
-import fr.swynn.repository.DefaultPersonRepository;
+import fr.swynn.repository.PersonRepository;
+import fr.swynn.repository.impl.DefaultPersonRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,16 +1,14 @@
 package gateway;
 
-import core.FakeFirestationService;
-import core.FakeGateway;
-import core.FakeMedicalService;
-import core.FakePersonService;
-import fr.swynn.core.Gateway;
-import fr.swynn.gateway.GatewayProvider;
-import fr.swynn.gateway.SafetyNetGateway;
+import service.impl.FakeFirestationService;
+import service.impl.FakeMedicalService;
+import service.impl.FakePersonService;
+import fr.swynn.exception.*;
+import fr.swynn.gateway.Gateway;
+import fr.swynn.gateway.impl.GatewayProvider;
 import fr.swynn.model.Firestation;
 import fr.swynn.model.MedicalRecord;
 import fr.swynn.model.Person;
-import fr.swynn.service.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -317,5 +315,31 @@ class GatewayTest {
 
         // THEN the returned list contains 2 childrens
         Assertions.assertEquals(1, expected.size());
+    }
+
+    @Test
+    void getPersonByFirstNameAndLastName_returnListOfPerson_existingPerson() {
+        // GIVEN a gateway and a person
+        final var firstName = "John";
+        final var lastName = "Doe";
+
+        // WHEN getPersonByFirstNameAndLastName is called
+        final var expected = gateway.getPersonByFirstAndLastName(firstName, lastName);
+
+        // THEN the returned list contains 1 person
+        Assertions.assertEquals(1, expected.size());
+    }
+
+    @Test
+    void getPersonByFirstNameAndLastName_returnEmptyList_nonExistingPerson() {
+        // GIVEN a gateway and a person
+        final var firstName = "John";
+        final var lastName = "Test";
+
+        // WHEN getPersonByFirstNameAndLastName is called
+        final var expected = gateway.getPersonByFirstAndLastName(firstName, lastName);
+
+        // THEN the returned list contains 0 person
+        Assertions.assertEquals(0, expected.size());
     }
 }

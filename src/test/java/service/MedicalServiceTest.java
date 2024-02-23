@@ -1,10 +1,10 @@
 package service;
 
-import fr.swynn.service.MedicalRecordAlreadyExist;
-import fr.swynn.core.MedicalService;
-import fr.swynn.service.UnknownMedicalRecord;
+import fr.swynn.exception.MedicalRecordAlreadyExist;
+import fr.swynn.service.MedicalService;
+import fr.swynn.exception.UnknownMedicalRecord;
 import fr.swynn.model.MedicalRecord;
-import fr.swynn.service.SafetyNetMedicalService;
+import fr.swynn.service.impl.SafetyNetMedicalService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

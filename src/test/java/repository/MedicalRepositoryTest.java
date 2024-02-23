@@ -1,7 +1,7 @@
 package repository;
 
-import fr.swynn.core.MedicalRepository;
-import fr.swynn.repository.DefaultMedicalRepository;
+import fr.swynn.repository.MedicalRepository;
+import fr.swynn.repository.impl.DefaultMedicalRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

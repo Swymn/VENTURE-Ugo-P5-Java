@@ -1,10 +1,10 @@
 package service;
 
-import fr.swynn.service.PersonAlreadyExist;
-import fr.swynn.core.PersonService;
-import fr.swynn.service.UnknownPerson;
+import fr.swynn.exception.PersonAlreadyExist;
+import fr.swynn.service.PersonService;
+import fr.swynn.exception.UnknownPerson;
 import fr.swynn.model.Person;
-import fr.swynn.service.SafetyNetPersonService;
+import fr.swynn.service.impl.SafetyNetPersonService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

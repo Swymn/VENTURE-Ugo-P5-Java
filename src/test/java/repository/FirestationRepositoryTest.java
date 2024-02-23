@@ -1,7 +1,7 @@
 package repository;
 
-import fr.swynn.core.FirestationRepository;
-import fr.swynn.repository.DefaultFirestationRepository;
+import fr.swynn.repository.FirestationRepository;
+import fr.swynn.repository.impl.DefaultFirestationRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,10 @@
 package service;
 
-import fr.swynn.service.FirestationAlreadyExist;
-import fr.swynn.core.FirestationService;
-import fr.swynn.service.UnknownFirestation;
+import fr.swynn.exception.FirestationAlreadyExist;
+import fr.swynn.service.FirestationService;
+import fr.swynn.exception.UnknownFirestation;
 import fr.swynn.model.Firestation;
-import fr.swynn.service.SafetyNetFirestationService;
+import fr.swynn.service.impl.SafetyNetFirestationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
