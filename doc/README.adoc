@@ -1,0 +1,314 @@
+= README
+
+== Présentation du projet
+
+Ce projet propose une API RESTful pour la gestion d'utilisateurs. Elle offre des fonctionnalités CRUD (création, lecture, mise à jour et suppression) pour les utilisateurs, et est conçue pour interagir avec le service de secours. L'architecture de l'API suit le modèle REST et s'appuie sur le pattern MVC. Le développement a été réalisé en suivant la méthodologie TDD (Test Driven Development).
+
+== Solutions techniques
+
+- *Gestion de version et collaboration*: Git est utilisé pour la gestion de version du code, son partage et la collaboration entre les développeurs.
+- *Développement de l'API*: SpringBoot est utilisé pour la création de l'API REST.
+- *Gestion des dépendances*: Maven est utilisé pour la gestion des dépendances et la construction du projet.
+- *Tests unitaires*: Les tests unitaires sont réalisés avec JUnit et Surefire.
+- *Couverture de code*: La couverture de code est mesurée avec JaCoCo.
+- *Journalisation*: SLF4J et Logback sont utilisés pour la journalisation.
+
+== Architecture de l'API
+
+[plantuml]
+----
+@startuml
+package fr-swynn {
+    class SafetyNetApplication
+
+    package Controller {
+        class FirestationController
+        class MedicalController
+        class PersonController
+
+        SafetyNetApplication <-- FirestationController : Injected by SpringBoot scan package
+        SafetyNetApplication <-- MedicalController : Injected by SpringBoot scan package
+        SafetyNetApplication <-- PersonController : Injected by SpringBoot scan package
+    }
+
+    package Gateway {
+        interface GatewayProxy
+        interface Gateway
+
+        class GatewayProvider
+        class SafetyNetGateway
+
+        FirestationController <-- GatewayProxy : Injected by ServiceLoader
+        MedicalController <-- GatewayProxy : Injected by ServiceLoader
+        PersonController <-- GatewayProxy : Injected by ServiceLoader
+
+        GatewayProxy <.. GatewayProvider : Implementation
+
+        Gateway <.. SafetyNetGateway : Implementation
+
+        GatewayProvider --* SafetyNetGateway : Return singleton instance
+    }
+
+    package Service {
+        interface FirestationService
+        interface MedicalService
+        interface PersonService
+
+        class SafetyNetFirestationService
+        class SafetyNetMedicalService
+        class SafetyNetPersonService
+
+        SafetyNetGateway <-- FirestationService : Injected by ServiceLoader
+        SafetyNetGateway <-- MedicalService : Injected by ServiceLoader
+        SafetyNetGateway <-- PersonService : Injected by ServiceLoader
+
+        FirestationService <.. SafetyNetFirestationService : Implementation
+        MedicalService <.. SafetyNetMedicalService : Implementation
+        PersonService <.. SafetyNetPersonService : Implementation
+    }
+
+    package Repository {
+        interface JsonRepository
+        interface FirestationRepository
+        interface MedicalRepository
+        interface PersonRepository
+
+        class DefaultJsonRepository
+        class DefaultFirestationRepository
+        class DefaultMedicalRepository
+        class DefaultPersonRepository
+
+        SafetyNetFirestationService <-- FirestationRepository : Injected by ServiceLoader
+        SafetyNetMedicalService <-- MedicalRepository : Injected by ServiceLoader
+        SafetyNetPersonService <-- PersonRepository : Injected by ServiceLoader
+
+        MedicalRepository <.. DefaultMedicalRepository : Implementation
+        PersonRepository <.. DefaultPersonRepository : Implementation
+        FirestationRepository <.. DefaultFirestationRepository : Implementation
+
+        DefaultFirestationRepository <-- JsonRepository : Injected by ServiceLoader
+        DefaultMedicalRepository <-- JsonRepository : Injected by ServiceLoader
+        DefaultPersonRepository <-- JsonRepository : Injected by ServiceLoader
+
+        JsonRepository <.. DefaultJsonRepository : Implementation
+    }
+}
+@enduml
+----
+
+== Architecture détaillée
+
+[plantuml]
+----
+@startuml
+package fr-swynn {
+    class SafetyNetApplication {
+        + void main(String[] args)
+    }
+
+    package Controller {
+        class FirestationController {
+            - void loadGateway()
+            + ResponseEntity<HomeFire> getFirestations(String address)
+            + ResponseEntity<CitizenPayload> getPersonByStationNumber(String station)
+            + ResponseEntity<List<String>> getPhoneListByFirestation(String station)
+            + ResponseEntity<Firestation> createFirestation(Firestation firestation)
+            + ResponseEntity<Firestation> deleteFirestation(Firestation firestation)
+            + ResponseEntity<Firestation> updateFirestation(Firestation firestation)
+        }
+        class MedicalController {
+            - void loadGateway()
+            + ResponseEntity<MedicalRecord> createMedicalRecord(MedicalRecord medicalRecord)
+            + ResponseEntity<MedicalRecord> deleteMedicalRecord(MedicalRecord medicalRecord)
+            + ResponseEntity<MedicalRecord> updateMedicalRecord(MedicalRecord medicalRecord)
+        }
+        class PersonController {
+            - void loadGateway()
+            + ResponseEntity<List<String>> getCommunityEmail(String city)
+            + ResponseEntity<List<DetailedCitizen>> getPersonByFirstAndLastName(String firstName, String lastName)
+            + ResponseEntity<List<ChildCitizen>> getChildrenAlert(String address)
+            + ResponseEntity<Person> deletePerson(Person person)
+            + ResponseEntity<Person> updatePerson(Person person)
+            + ResponseEntity<Person> createPerson(Person person)
+        }
+
+        SafetyNetApplication <-- FirestationController : Injected by SpringBoot scan package
+        SafetyNetApplication <-- MedicalController : Injected by SpringBoot scan package
+        SafetyNetApplication <-- PersonController : Injected by SpringBoot scan package
+    }
+
+    package Gateway {
+        interface GatewayProxy {
+            + void loadGateway()
+        }
+        interface Gateway {
+            + List<String> getCommunityEmail(String city);
+            + List<String> getPhoneListByFirestation(String station);
+            + List<ChildCitizen> getChildrensByAddress(String address);
+            + List<DetailedCitizen> getPersonByFirstAndLastName(String firstName, String lastName);
+            + Person deletePerson(Person person) throws UnknownPerson;
+            + Person updatePerson(Person person) throws UnknownPerson;
+            + Person createPerson(Person person) throws PersonAlreadyExist;
+            + HomeFire getHomeFire(String address) throws UnknownFirestation;
+            + CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation;
+            + Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation;
+            + Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
+            + Firestation updateFirestation(Firestation firestation) throws UnknownFirestation;
+            + Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation;
+            + MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist;
+            + MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+        }
+
+        class GatewayProvider {
+            + Gateway getGateway()
+        }
+        class SafetyNetGateway {
+            - void loadPersonService();
+            - void loadFirestationService();
+            - void loadMedicalService();
+            - DetailedCitizen parsePersonToDetailedCitizen(final Person person);
+            - CitizenPayload generateCitizenPayloadFromPersons(final List<Person> persons);
+            - Citizen parsePersonToCitizen(final Person person);
+            - boolean isAdult(final Person person);
+            - int getAge(Person person);
+            - ChildCitizen parsePersonToChildCitizen(final Person person, final List<Person> familyMembers);
+            - HomePeople parsePersonToHomePeople(final Person person);
+            - CitizenMedicalHistory[] getPersonsInsideHouse(final List<Person> persons, final String address);
+            - List<String> getCoveredAddressByStations(final String[] stations) throws UnknownFirestation
+            + List<String> getCommunityEmail(String city);
+            + List<String> getPhoneListByFirestation(String station);
+            + List<ChildCitizen> getChildrensByAddress(String address);
+            + List<DetailedCitizen> getPersonByFirstAndLastName(String firstName, String lastName);
+            + Person deletePerson(Person person) throws UnknownPerson;
+            + Person updatePerson(Person person) throws UnknownPerson;
+            + Person createPerson(Person person) throws PersonAlreadyExist;
+            + HomeFire getHomeFire(String address) throws UnknownFirestation;
+            + CitizenPayload getPersonByStationNumber(String station) throws UnknownFirestation;
+            + Map<String, CitizenMedicalHistory[]> getCitizenServedByStations(String[] stations) throws UnknownFirestation;
+            + Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
+            + Firestation updateFirestation(Firestation firestation) throws UnknownFirestation;
+            + Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation;
+            + MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist;
+            + MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+        }
+
+        FirestationController <-- GatewayProxy : Injected by ServiceLoader
+        MedicalController <-- GatewayProxy : Injected by ServiceLoader
+        PersonController <-- GatewayProxy : Injected by ServiceLoader
+
+        GatewayProxy <.. GatewayProvider : Implementation
+
+        Gateway <.. SafetyNetGateway : Implementation
+
+        GatewayProvider --* SafetyNetGateway : Return singleton instance
+    }
+
+    package Service {
+        interface FirestationService {
+            + List<String> getFirestationAddressByStationNumber(String station) throws UnknownFirestation;
+            + Firestation deleteFirestation(Firestation firestation) throws UnknownFirestation;
+            + Firestation updateFirestation(Firestation firestation) throws UnknownFirestation;
+            + Firestation createFirestation(Firestation firestation) throws FirestationAlreadyExist;
+            + String getFirestationNumberByAddress(String address) throws UnknownFirestation;
+        }
+        interface MedicalService {
+            + MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist;
+            + MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord getMedicalRecord(String firstName, String lastName) throws UnknownMedicalRecord;
+        }
+        interface PersonService {
+            + MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist;
+            + MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord getMedicalRecord(String firstName, String lastName) throws UnknownMedicalRecord;
+        }
+
+        class SafetyNetFirestationService {
+            - void loadFirestationRepository();
+            + List<String> getFirestationAddressByStationNumber(String station) throws UnknownFirestation;
+            + Firestation deleteFirestation(final Firestation firestation) throws UnknownFirestation;
+            + Firestation updateFirestation(final Firestation firestation) throws UnknownFirestation;
+            + Firestation createFirestation(final Firestation firestation) throws FirestationAlreadyExist;
+            + String getFirestationNumberByAddress(final String address) throws UnknownFirestation;
+        }
+        class SafetyNetMedicalService {
+            - void loadMedicalRepository();
+            + MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) throws MedicalRecordAlreadyExist;
+            + MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord deleteMedicalRecord(MedicalRecord medicalRecord) throws UnknownMedicalRecord;
+            + MedicalRecord getMedicalRecord(final String firstName, final String lastName) throws UnknownMedicalRecord;
+        }
+        class SafetyNetPersonService {
+            - void loadPersonRepository();
+            + List<String> getCommunityEmail(final String city);
+            + List<Person> getPersonByFirstAndLastName(final String firstName, final String lastName);
+            + List<Person> getPersonByAddress(final String address);
+            + Person deletePerson(final Person person) throws UnknownPerson;
+            + Person updatePerson(final Person person) throws UnknownPerson;
+            + Person createPerson(final Person person) throws PersonAlreadyExist;
+        }
+
+        SafetyNetGateway <-- FirestationService : Injected by ServiceLoader
+        SafetyNetGateway <-- MedicalService : Injected by ServiceLoader
+        SafetyNetGateway <-- PersonService : Injected by ServiceLoader
+
+        FirestationService <.. SafetyNetFirestationService : Implementation
+        MedicalService <.. SafetyNetMedicalService : Implementation
+        PersonService <.. SafetyNetPersonService : Implementation
+    }
+
+    package Repository {
+        interface JsonRepository {
+            + ArrayNode getJsonData(String key);
+        }
+        interface FirestationRepository {
+            + List<Firestation> getAllfirestations();
+        }
+        interface MedicalRepository {
+            + List<MedicalRecord> getAllMedicalRecords();
+        }
+        interface PersonRepository {
+            + List<Person> getAllPerson();
+        }
+
+        class DefaultJsonRepository {
+            - JsonNode getJsonFile(final String fileName);
+            - String getFileContent(final InputStream stream);
+            + ArrayNode getJsonData(String key);
+        }
+        class DefaultFirestationRepository {
+            - void loadJsonRepository();
+            + List<Firestation> getAllfirestations();
+            - Firestation map(final JsonNode jsonFirestation)
+        }
+        class DefaultMedicalRepository {
+            - void loadJsonRepository();
+            + List<MedicalRecord> getAllMedicalRecords();
+            - MedicalRecord map(final JsonNode jsonMedicalRecord)
+        }
+        class DefaultPersonRepository {
+            - void loadJsonRepository();
+            + List<Person> getAllPerson();
+            - Person map(final JsonNode jsonPerson)
+        }
+
+        SafetyNetFirestationService <-- FirestationRepository : Injected by ServiceLoader
+        SafetyNetMedicalService <-- MedicalRepository : Injected by ServiceLoader
+        SafetyNetPersonService <-- PersonRepository : Injected by ServiceLoader
+
+        MedicalRepository <.. DefaultMedicalRepository : Implementation
+        PersonRepository <.. DefaultPersonRepository : Implementation
+        FirestationRepository <.. DefaultFirestationRepository : Implementation
+
+        DefaultFirestationRepository <-- JsonRepository : Injected by ServiceLoader
+        DefaultMedicalRepository <-- JsonRepository : Injected by ServiceLoader
+        DefaultPersonRepository <-- JsonRepository : Injected by ServiceLoader
+
+        JsonRepository <.. DefaultJsonRepository : Implementation
+    }
+}
+@enduml
+----
