@@ -140,7 +140,7 @@ public class SafetyNetGateway implements Gateway {
     }
 
     private Citizen parsePersonToCitizen(final Person person) {
-        return new Citizen(person.firstName(), person.lastName(), person.address(), person.phone());
+        return new Citizen(person.firstName(), person.lastName(), person.address(), person.phone(), getAge(person));
     }
 
     private boolean isAdult(final Person person) {
@@ -179,10 +179,10 @@ public class SafetyNetGateway implements Gateway {
     private ChildCitizen parsePersonToChildCitizen(final Person person, final List<Person> familyMembers) {
         final var familyMembersWithoutChild = familyMembers.stream()
                 .filter(member -> !member.equals(person))
-                .map(member -> new Citizen(member.firstName(), member.lastName(), member.address(), member.phone()))
+                .map(member -> new Citizen(member.firstName(), member.lastName(), member.address(), member.phone(), getAge(member)))
                 .toList();
 
-        return new ChildCitizen(person.firstName(), person.lastName(), familyMembersWithoutChild);
+        return new ChildCitizen(person.firstName(), person.lastName(), getAge(person), familyMembersWithoutChild);
     }
 
     @Override

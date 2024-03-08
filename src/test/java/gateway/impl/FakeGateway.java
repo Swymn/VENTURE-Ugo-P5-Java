@@ -195,7 +195,7 @@ public class FakeGateway implements Gateway {
 
     private Citizen parsePersonToCitizen(final Person person) {
         return new Citizen(person.firstName(), person.lastName(),
-                person.address(), person.phone());
+                person.address(), person.phone(), getAge(person));
     }
 
     private int getAge(final Person person) {
@@ -369,7 +369,7 @@ public class FakeGateway implements Gateway {
         final var childrenInsideHouse = personsInsideHouse.stream()
                 .filter(person -> !isAdult(person)).toList();
         final var children = childrenInsideHouse.stream()
-                .map(person -> new ChildCitizen(person.firstName(), person.lastName(), getFamilyMembers(person)));
+                .map(person -> new ChildCitizen(person.firstName(), person.lastName(), getAge(person), getFamilyMembers(person)));
 
         return children.toList();
     }
@@ -378,7 +378,7 @@ public class FakeGateway implements Gateway {
         return persons.stream()
                 .filter(p -> p.address().equals(person.address()))
                 .filter(p -> !p.firstName().equals(person.firstName()) && !p.lastName().equals(person.lastName()))
-                .map(p -> new Citizen(p.firstName(), p.lastName(), p.address(), p.phone()))
+                .map(p -> new Citizen(p.firstName(), p.lastName(), p.address(), p.phone(), getAge(person)))
                 .toList();
     }
 

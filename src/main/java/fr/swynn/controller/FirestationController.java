@@ -51,7 +51,7 @@ public class FirestationController {
         }
     }
 
-    @GetMapping("/stations")
+    @GetMapping("/flood/stations")
     public ResponseEntity<Map<String, CitizenMedicalHistory[]>> getCitizenServedByStations(@RequestParam("stations") final String stations) {
         try {
             final var stationsList = stations.split(",");
